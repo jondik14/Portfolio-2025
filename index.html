@@ -4,6 +4,55 @@
 
 <!-- Mirrored from  by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 15 Sep 2025 07:04:29 GMT -->
 <head>
+<!-- FRAMER-UI-CLEAN START -->
+<style>
+  /* Hide Framer badges/editor buttons if present */
+  .framerBadge,
+  .framer-edit-mode-button,
+  [data-framer-component-type="framerBadge"],
+  a[aria-label*="Framer"],
+  a[href*="framer.com/editor"],
+  a[href*="framer.com/upgrade"],
+  a[href*="framer.com/pricing"] {
+    display: none !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+  }
+</style>
+<script>
+  (function(){
+    function killFramerBits(){
+      const sel = [
+        '.framerBadge',
+        '.framer-edit-mode-button',
+        '[data-framer-component-type="framerBadge"]',
+        'a[aria-label*="Framer"]',
+        'a[href*="framer.com/editor"]',
+        'a[href*="framer.com/upgrade"]',
+        'a[href*="framer.com/pricing"]'
+      ].join(',');
+
+      document.querySelectorAll(sel).forEach(el => {
+        try { el.remove(); } catch(e) { el.style.display='none'; }
+      });
+    }
+    // Run now + watch for late injections
+    killFramerBits();
+    new MutationObserver(killFramerBits).observe(document.documentElement, { childList:true, subtree:true });
+  })();
+</script>
+<!-- FRAMER-UI-CLEAN END -->
+<!-- POSTHOG INJECT START -->
+<script>
+  (function(){
+    window.posthog=window.posthog||function(){(posthog.q=posthog.q||[]).push(arguments)};
+    posthog.__SV=1;
+    var d=document, o=d.createElement('script'); o.async=true; o.src='https://us.i.posthog.com/static/array.js';
+    var s=d.getElementsByTagName('script')[0]; s.parentNode.insertBefore(o,s);
+    posthog.init('PH_PROJECT_API_KEY_HERE', { api_host: 'https://us.i.posthog.com' });
+  })();
+</script>
+<!-- POSTHOG INJECT END -->
     <meta charset="utf-8">
     
     
@@ -64,4 +113,6 @@
 
 <!-- Mirrored from  by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 15 Sep 2025 07:04:46 GMT -->
 </html>
+
+
 
