@@ -20,40 +20,20 @@
   }
 </style>
 <script>
+  // remove the bar the moment it appears
   (function(){
-    function killFramerBits(){
-      const sel = [
-        '.framerBadge',
-        '.framer-edit-mode-button',
-        '[data-framer-component-type="framerBadge"]',
-        'a[aria-label*="Framer"]',
-        'a[href*="framer.com/editor"]',
-        'a[href*="framer.com/upgrade"]',
-        'a[href*="framer.com/pricing"]'
-      ].join(',');
+    const kill = () => {
+      document.querySelectorAll(
+        '#__framer-editorbar,#__framer-editorbar-container,[aria-label="Edit Framer Content"],iframe[src*="framer.com/edit"]'
+      ).forEach(el => { try { el.remove(); } catch(_){} });
+    };
+    // run now
+    kill();
+    // watch for future injections
+    new MutationObserver(kill).observe(document.documentElement, { childList:true, subtree:true });
+  })();
+</script>
 
-      document.querySelectorAll(sel).forEach(el => {
-        try { el.remove(); } catch(e) { el.style.display='none'; }
-      });
-    }
-    // Run now + watch for late injections
-    killFramerBits();
-    new MutationObserver(killFramerBits).observe(document.documentElement, { childList:true, subtree:true });
-  })();
-</script>
-<!-- FRAMER-UI-CLEAN END -->
-<!-- POSTHOG INJECT START -->
-<script>
-  (function(){
-    window.posthog=window.posthog||function(){(posthog.q=posthog.q||[]).push(arguments)};
-    posthog.__SV=1;
-    var d=document, o=d.createElement('script'); o.async=true; o.src='https://us.i.posthog.com/static/array.js';
-    var s=d.getElementsByTagName('script')[0]; s.parentNode.insertBefore(o,s);
-    posthog.init('PH_PROJECT_API_KEY_HERE', { api_host: 'https://us.i.posthog.com' });
-  })();
-</script>
-<!-- POSTHOG INJECT END -->
-    <meta charset="utf-8">
     <script>
     !function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.crossOrigin="anonymous",p.async=!0,p.src=s.api_host.replace(".i.posthog.com","-assets.i.posthog.com")+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+".people (stub)"},o="init Ce js Ls Te Fs Ds capture Ye calculateEventProperties Us register register_once register_for_session unregister unregister_for_session Ws getFeatureFlag getFeatureFlagPayload isFeatureEnabled reloadFeatureFlags updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures on onFeatureFlags onSurveysLoaded onSessionId getSurveys getActiveMatchingSurveys renderSurvey canRenderSurvey canRenderSurveyAsync identify setPersonProperties group resetGroups setPersonPropertiesForFlags resetPersonPropertiesForFlags setGroupPropertiesForFlags resetGroupPropertiesForFlags reset get_distinct_id getGroups get_session_id get_session_replay_url alias set_config startSessionRecording stopSessionRecording sessionRecordingStarted captureException loadToolbar get_property getSessionProperty Bs zs createPersonProfile Hs Ms Gs opt_in_capturing opt_out_capturing has_opted_in_capturing has_opted_out_capturing get_explicit_consent_status is_capturing clear_opt_in_out_capturing Ns debug L qs getPageViewId captureTraceFeedback captureTraceMetric".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
     posthog.init('phc_53W2e8j14bMWQ8BDIEtwfuhMItLIUB2jvkuTJcstz0V', {
