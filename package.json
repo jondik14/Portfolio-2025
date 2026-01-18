@@ -1,0 +1,12 @@
+{
+  "name": "portfolio-webp-converter",
+  "version": "1.0.0",
+  "description": "Convert images to WebP format",
+  "type": "module",
+  "scripts": {
+    "convert:webp": "node scripts/convert-to-webp.mjs"
+  },
+  "devDependencies": {
+    "sharp": "^0.33.0"
+  }
+}

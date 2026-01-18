@@ -1,0 +1,1026 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Foragecaster — Luke Niccol</title>
+    <meta name="description" content="Farm forecasting with real data and AI insights.">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="../../Logo black bg.png">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        @font-face {
+            font-family: 'Cirka';
+            src: url('../../fonts/Cirka/Cirka-Regular.woff2') format('woff2');
+            font-weight: 400;
+            font-style: normal;
+            font-display: swap;
+        }
+        @font-face {
+            font-family: 'Cirka';
+            src: url('../../fonts/Cirka/Cirka-Bold.woff2') format('woff2');
+            font-weight: 700;
+            font-style: normal;
+            font-display: swap;
+        }
+
+        :root {
+            --font-sans: 'Instrument Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            --font-serif: 'DM Serif Display', Georgia, serif;
+            --font-heading: 'Cirka', Georgia, serif;
+            
+            --space-1: 8px;
+            --space-2: 16px;
+            --space-3: 24px;
+            --space-4: 32px;
+            --space-5: 40px;
+            --space-6: 48px;
+            --space-8: 64px;
+            --space-10: 80px;
+            --space-12: 96px;
+            --space-16: 128px;
+            --space-20: 160px;
+            
+            --radius-lg: 20px;
+            --radius-xl: 24px;
+            --radius-2xl: 32px;
+            --radius-full: 9999px;
+            
+            --text-primary: #111522;
+            --text-secondary: #4a5585;
+            --text-muted: #6b779c;
+            --accent: #0070cc;
+            --surface: #ffffff;
+            --surface-elevated: #f9fafc;
+            --border-subtle: rgba(0, 0, 0, 0.04);
+            --border-default: rgba(0, 0, 0, 0.08);
+            
+            --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.06);
+        }
+
+        [data-theme="dark"] {
+            --text-primary: #f8f9fc;
+            --text-secondary: #b0b9e0;
+            --text-muted: #8b99cf;
+            --accent: #4dafff;
+            --surface: #0a0a14;
+            --surface-elevated: #11111f;
+            --border-subtle: rgba(255, 255, 255, 0.03);
+            --border-default: rgba(255, 255, 255, 0.08);
+        }
+
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-sans);
+            font-size: 18px;
+            color: var(--text-primary);
+            background: var(--surface);
+            line-height: 1.7;
+            font-weight: 400;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .page-wrapper {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 var(--space-6);
+        }
+
+        @media (max-width: 768px) {
+            .nav {
+                height: 64px;
+            }
+            .nav-inner {
+                padding: 0 var(--space-4);
+            }
+            .nav-logo {
+                font-size: 16px;
+                display: block !important;
+            }
+            .nav-right {
+                display: flex !important;
+                gap: var(--space-3);
+            }
+            .nav-back {
+                font-size: 13px;
+                display: flex !important;
+            }
+            .theme-toggle {
+                width: 36px;
+                height: 36px;
+                flex-shrink: 0;
+            }
+            .hero {
+                padding-top: var(--space-12);
+            }
+            .hero-title {
+                font-size: clamp(2.5rem, 12vw, 3.75rem);
+            }
+            .page-wrapper {
+                padding: 0 var(--space-6);
+            }
+        }
+
+        /* Navigation */
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 96px;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        [data-theme="dark"] .nav {
+            background: rgba(10, 10, 20, 0.8);
+        }
+
+        .nav-inner {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: var(--space-4);
+        }
+
+        .theme-toggle {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: var(--radius-full);
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 1px solid var(--border-default);
+            background: var(--surface);
+        }
+
+        .theme-toggle:hover {
+            color: var(--text-primary);
+            border-color: var(--accent);
+            background: var(--surface-elevated);
+        }
+
+        .theme-transition-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 9999;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .theme-transition-overlay.active {
+            opacity: 1;
+        }
+
+        .nav-logo {
+            font-family: var(--font-heading);
+            font-weight: 700;
+            font-size: 1.25rem;
+            text-decoration: none;
+            color: var(--text-primary);
+            letter-spacing: -0.02em;
+        }
+
+        .nav-back {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        .nav-back svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        .nav-back span {
+            display: none;
+        }
+
+        @media (min-width: 769px) {
+            .nav-back span {
+                display: inline;
+            }
+        }
+
+        .nav-back:hover {
+            color: var(--accent);
+        }
+
+        /* Hero */
+        .hero {
+            padding-top: var(--space-20);
+            padding-bottom: var(--space-12);
+            max-width: 1000px;
+        }
+
+        .hero-tag {
+            font-size: 14px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--accent);
+            margin-bottom: var(--space-4);
+            display: inline-block;
+            background: rgba(0, 112, 204, 0.1);
+            padding: 4px 12px;
+            border-radius: var(--radius-full);
+        }
+
+        [data-theme="dark"] .hero-tag {
+            background: rgba(77, 175, 255, 0.1);
+        }
+
+        .hero-title {
+            font-family: var(--font-serif);
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            line-height: 1.1;
+            margin-bottom: var(--space-6);
+            font-weight: 400;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1.125rem, 2vw, 1.5rem);
+            color: var(--text-secondary);
+            max-width: 800px;
+            margin-bottom: var(--space-10);
+        }
+
+        .hero-meta {
+            padding-top: var(--space-8);
+            border-top: 1px solid var(--border-default);
+            display: flex;
+            gap: var(--space-12);
+            flex-wrap: wrap;
+        }
+
+        .meta-item span:first-child {
+            display: block;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 4px;
+        }
+
+        .meta-item span:last-child {
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        /* Images */
+        .image-full {
+            width: 100%;
+            margin: var(--space-12) 0;
+            border-radius: 4px;
+            overflow: hidden;
+            border: 1px solid var(--border-subtle);
+        }
+
+        .image-full img {
+            width: 100%;
+            display: block;
+        }
+
+        .image-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: var(--space-6);
+            margin: var(--space-12) 0;
+        }
+
+        @media (max-width: 768px) {
+            .image-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .image-item {
+            border-radius: 4px;
+            overflow: hidden;
+            border: 1px solid var(--border-subtle);
+        }
+
+        .image-item img {
+            width: 100%;
+            display: block;
+        }
+
+        /* Content */
+        .section-content {
+            max-width: 800px;
+            margin: var(--space-20) 0;
+        }
+
+        .section-content h2 {
+            font-family: var(--font-heading);
+            font-size: var(--space-6);
+            margin-bottom: var(--space-6);
+            letter-spacing: -0.02em;
+            position: relative;
+            padding-left: var(--space-2);
+        }
+
+        .section-content h2::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: var(--accent);
+            border-radius: 2px;
+        }
+
+        .section-content h3 {
+            font-family: var(--font-heading);
+            font-size: 1.5rem;
+            margin-bottom: var(--space-4);
+            margin-top: var(--space-8);
+            letter-spacing: -0.02em;
+        }
+
+        .counter-number {
+            display: inline-block;
+            color: var(--accent);
+            font-weight: 700;
+        }
+
+        .image-caption {
+            text-align: left;
+            color: var(--text-muted);
+            font-size: 14px;
+            margin-top: var(--space-4);
+            margin-bottom: var(--space-12);
+        }
+
+        @media (max-width: 768px) {
+            .section-content {
+                margin: var(--space-8) 0;
+            }
+            .section-content p {
+                margin-bottom: var(--space-4);
+            }
+            .image-full {
+                margin: var(--space-6) 0;
+            }
+            .image-grid {
+                margin: var(--space-6) 0;
+            }
+            .highlight-quote {
+                margin: var(--space-8) 0;
+                padding: var(--space-8) 0;
+            }
+            .hero {
+                padding-bottom: var(--space-8);
+            }
+        }
+
+        .section-content h2 {
+            font-family: var(--font-heading);
+            font-size: var(--space-6);
+            margin-bottom: var(--space-6);
+            letter-spacing: -0.02em;
+        }
+
+        .section-content p {
+            margin-bottom: var(--space-6);
+            color: var(--text-secondary);
+            font-size: 1.125rem;
+        }
+
+        .section-content ul {
+            margin-bottom: var(--space-8);
+            padding-left: var(--space-6);
+        }
+
+        .section-content li {
+            margin-bottom: var(--space-3);
+            color: var(--text-secondary);
+        }
+
+        /* Quotes */
+        .highlight-quote {
+            padding: var(--space-16) 0;
+            border-top: 1px solid var(--border-default);
+            border-bottom: 1px solid var(--border-default);
+            margin: var(--space-20) 0;
+        }
+
+        .quote-text {
+            font-family: var(--font-serif);
+            font-size: clamp(1.5rem, 4vw, 2.5rem);
+            line-height: 1.2;
+            color: var(--text-primary);
+            font-style: italic;
+        }
+
+        /* Footer Nav */
+        .project-navigation {
+            display: flex;
+            justify-content: space-between;
+            gap: var(--space-6);
+            margin: var(--space-20) 0;
+        }
+
+        .project-nav-link {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            padding: var(--space-4);
+            background: var(--surface-elevated);
+            border: 1px solid var(--border-default);
+            border-radius: var(--radius-xl);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            position: relative;
+            min-width: 0;
+            overflow: hidden;
+        }
+
+        .project-nav-link > div {
+            min-width: 0;
+            flex: 1;
+        }
+
+        .project-nav-link:hover {
+            border-color: var(--accent);
+            transform: translateY(-2px);
+            background: var(--surface);
+        }
+
+        .project-nav-link.next {
+            text-align: right;
+            align-items: flex-end;
+        }
+
+        .project-nav-link.next > div {
+            text-align: right;
+        }
+
+        .project-nav-label {
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            letter-spacing: 0.05em;
+            line-height: 1.2;
+            white-space: nowrap;
+        }
+
+        .project-nav-title {
+            font-family: var(--font-heading);
+            font-size: 1.1rem;
+            color: var(--text-primary);
+            line-height: 1.3;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            hyphens: auto;
+        }
+
+        .project-nav-arrow {
+            display: none;
+            width: 20px;
+            height: 20px;
+            color: var(--accent);
+            flex-shrink: 0;
+        }
+
+        @media (max-width: 768px) {
+            .project-navigation {
+                margin: var(--space-12) 0;
+                gap: var(--space-4);
+            }
+
+            .project-nav-link {
+                padding: var(--space-3);
+                flex-direction: row;
+                align-items: center;
+                gap: var(--space-2);
+                min-width: 0;
+            }
+
+            .project-nav-link > div {
+                min-width: 0;
+                flex: 1;
+                overflow: hidden;
+            }
+
+            .project-nav-link.next {
+                flex-direction: row-reverse;
+            }
+
+            .project-nav-link.next > div {
+                text-align: left;
+            }
+
+            .project-nav-arrow {
+                display: block;
+            }
+
+            .project-nav-label {
+                font-size: 9px;
+                white-space: nowrap;
+            }
+
+            .project-nav-title {
+                font-size: 0.9rem;
+                line-height: 1.2;
+            }
+        }
+
+        .footer-bottom {
+            padding: var(--space-10) 0;
+            border-top: 1px solid var(--border-default);
+            display: flex;
+            justify-content: space-between;
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+
+        /* Reveal System */
+        .js-enabled .reveal-el {
+            opacity: 0;
+            visibility: hidden;
+        }
+    </style>
+</head>
+<body>
+    <script>
+        document.documentElement.classList.add('js-enabled');
+        setTimeout(() => {
+            if (getComputedStyle(document.body).opacity === '0') {
+                document.documentElement.classList.remove('js-enabled');
+            }
+        }, 3000);
+    </script>
+
+    <nav class="nav">
+        <div class="page-wrapper" style="width: 100%;">
+            <div class="nav-inner">
+                <a href="../../index.html" class="nav-logo">Luke Niccol</a>
+                <div class="nav-right">
+                    <a href="../../index.html" class="nav-back">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                        <span>Home</span>
+                    </a>
+                    <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle dark mode" type="button">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="page-wrapper">
+        <header class="hero">
+            <h1 class="hero-title reveal-el">Farm forecasting with real data and AI insights.</h1>
+            
+            <div class="hero-meta reveal-el">
+                <div class="meta-item">
+                    <span>COMPANY</span>
+                    <span>Agriwebb</span>
+                </div>
+                <div class="meta-item">
+                    <span>ROLE</span>
+                    <span>UX researcher / UI designer</span>
+                </div>
+                <div class="meta-item">
+                    <span>EXPERTISE</span>
+                    <span>UX research, UI design</span>
+                </div>
+                <div class="meta-item">
+                    <span>YEAR</span>
+                    <span>2024</span>
+                </div>
+            </div>
+        </header>
+
+        <div class="image-full reveal-el" style="margin-top: var(--space-12);">
+            <img src="../../framerusercontent.com/images/C0XD57SMoF3Y7dpsgTJet4fcWpU.jpg" alt="Foragecaster Hero">
+        </div>
+
+        <main>
+            <article class="section-content reveal-el">
+                <h2>Project description</h2>
+                <h3 style="font-size: 1.5rem; margin-bottom: var(--space-4); margin-top: var(--space-8);">Overview</h3>
+                <p>Foragecaster is 4-year research project with leading-edge industry and academia working on creating an accurate livestock supply forecaster using the best of breed domain models with machine learning.</p>
+                <p>As a part of the project, I designed research-driven interfaces that translated complex data into practical, user-friendly tools for farmers. By conducting user interviews and collaborating with research teams, I ensured that advanced models were accessible and actionable for effective farm management.</p>
+                
+                <h3 style="font-size: 1.5rem; margin-bottom: var(--space-4); margin-top: var(--space-8);">Problem</h3>
+                <p>In agriculture, accurately predicting pasture growth is essential for managing livestock and ensuring sustainable land use. Farmers need reliable insights into forage availability to make timely decisions on grazing, feed supplements, and herd management.</p>
+                <p>Without accurate predictions, they risk overgrazing, underfeeding, or having to deal with feed shortages, all of which impact farm productivity and profitability. The challenge lies in the complexity of modeling factors such as weather variability, soil conditions, and plant growth stages, which all influence pasture growth.</p>
+                
+                <h3 style="font-size: 1.5rem; margin-bottom: var(--space-4); margin-top: var(--space-8);">Solution</h3>
+                <p>Foragecaster is a predictive tool designed to give farmers a clear, data-driven forecast of pasture growth rates over upcoming months. It uses a combination of weather data, soil conditions, and pasture types to provide predictions that reflect both expected growth and uncertainty.</p>
+                <p>By presenting information visually through interactive graphs, Foragecaster allows farmers to assess pasture availability, make informed decisions on livestock management, and better plan for seasonal changes. This tool provides a user-friendly interface that simplifies complex data, making it accessible for those without a technical background.</p>
+                
+                <h3 style="font-size: 1.5rem; margin-bottom: var(--space-4); margin-top: var(--space-8);">My role / responsibilities</h3>
+                <p>In this project, my role involved research and the design of the ForageCaster interface. I was responsible for creating a responsive, intuitive interface that would effectively communicate complex data in a clear and accessible way.</p>
+                <p>This involved designing interactive graphs to display predictive growth rates and uncertainty intervals, as well as integrating user interactions for filtering and customizing data views. Throughout the project, I collaborated closely with farmers over interviews to ensure the interface met user needs, iterated based on feedback, and tested the tool to ensure accuracy and usability.</p>
+            </article>
+
+            <article class="section-content reveal-el">
+                <h2>Research and understanding the agricultural landscape</h2>
+                <p>To effectively design ForageCaster, I immersed myself in understanding the agricultural industry, particularly the challenges of pasture growth management. This stage involved extensive research into pasture biology, the needs of farmers, and their day-to-day workflows.</p>
+                <p>I read agricultural reports, explored similar tools, and spoke directly with farmers in frequent interviews to gain insights into their pain points and emotional motivations. This foundational knowledge helped me empathize with farmers' challenges and design a tool tailored to their needs.</p>
+            </article>
+
+            <div class="image-grid reveal-el">
+                <div class="image-item">
+                    <img src="../../framerusercontent.com/images/jpLq02YHhbYzPRDKeqvCuMDVJCE.jpg" alt="Research sketches">
+                </div>
+                <div class="image-item">
+                    <img src="../../framerusercontent.com/images/hqoDjc0dpyOZManasDE57boFRo.jpg" alt="Research sketches">
+                </div>
+            </div>
+
+            <div class="image-grid reveal-el">
+                <div class="image-item">
+                    <img src="../../framerusercontent.com/images/oxGDsmtMY8pk3kqP3ta2WTRmgag.jpg" alt="Research sketches">
+                </div>
+                <div class="image-item">
+                    <img src="../../framerusercontent.com/images/skRFXaegNJ8ajL23CNsX1Nwzwzs.jpg" alt="Style guide">
+                </div>
+            </div>
+
+            <article class="section-content reveal-el">
+                <h2>Visualising pasture on the map</h2>
+                <p>To make ForageCaster an intuitive tool, I began by designing a visual system to effectively communicate pasture quality and quantity on a map. This involved extensive research to understand how best to represent pasture data, exploring visual options like color gradients, density markers, and layering to ensure clarity and ease of interpretation.</p>
+            </article>
+
+            <div class="image-full reveal-el">
+                <img src="../../framerusercontent.com/images/3hunjvUHV7Wwt7E9QAFGs7GCLg.jpg" alt="Map visualization">
+            </div>
+
+            <div class="image-full reveal-el">
+                <img src="../../framerusercontent.com/images/OfvzA8zoib29cruSGAu5mhU86Dc.png" alt="Map key design">
+            </div>
+
+            <article class="section-content reveal-el">
+                <p>With each iteration, I experimented and refined these visuals based on feedback, adjusting elements like color, transparency, and symbol size to enhance user understanding. Through ongoing testing, I transformed initial concepts into a polished, user-friendly interface that balances visual appeal with functionality—illustrating the importance of research and experimentation in creating an impactful visual system.</p>
+            </article>
+
+            <div class="image-full reveal-el">
+                <img src="../../framerusercontent.com/images/jXyN1cEqBj9jwzUr8bIO3z18.jpg" alt="Map visualization">
+            </div>
+
+            <div class="image-full reveal-el">
+                <img src="../../framerusercontent.com/images/c2VPv95MDDBd9tQAqzpIqGR63XM.jpg" alt="Map key design">
+            </div>
+
+            <div class="image-grid reveal-el">
+                <div class="image-item">
+                    <img src="../../framerusercontent.com/images/uzeZLlquRmWn8db9ZYsa9x4cEQ.jpg" alt="Map key design">
+                </div>
+                <div class="image-item">
+                    <img src="../../framerusercontent.com/images/tfYOFP8jZgp347m1wJhm0wF7RA.jpg" alt="Map key design">
+                </div>
+            </div>
+
+            <div class="image-grid reveal-el">
+                <div class="image-item">
+                    <img src="../../framerusercontent.com/images/sfpjK2xZHo50QDbVETEc8FvBF8.jpg" alt="Map key design">
+                </div>
+                <div class="image-item">
+                    <img src="../../framerusercontent.com/images/DRMgaZDOh5HFXea5CDKhbKcCA.jpg" alt="Map key design">
+                </div>
+            </div>
+
+            <div class="image-full reveal-el">
+                <img src="../../framerusercontent.com/images/3BCoAskF9EzEw0fJL5c6n3TA8.jpg" alt="Map key design">
+            </div>
+
+            <article class="section-content reveal-el">
+                <h2>An interactive weight gain graph</h2>
+                <p>To provide deeper insights into livestock management, I designed interactive weight gain graphs that visually represent the potential weight animals could gain based on the paddocks they graze in.</p>
+                <p>This feature allows users to view projected weight outcomes as they relate to pasture growth rates, helping them optimize grazing decisions. Developing these graphs involved testing various methods to display growth trends and uncertainties, including confidence bands and density shading to clearly indicate the range of possible outcomes.</p>
+            </article>
+
+            <div class="image-grid reveal-el">
+                <div class="image-item">
+                    <img src="../../framerusercontent.com/images/9uzRw7ObreYvU7blFZ5ytDpU7I.jpg" alt="Weight gain graph">
+                </div>
+                <div class="image-item">
+                    <img src="../../framerusercontent.com/images/8VeIQetzR6Ksatf5ENNty40CjNA.jpg" alt="Weight gain graph">
+                </div>
+            </div>
+
+            <div class="image-grid reveal-el">
+                <div class="image-item">
+                    <img src="../../framerusercontent.com/images/Ew7YYPiw0286Kui5TUyR4Y1sbqo.jpg" alt="Weight gain graph">
+                </div>
+                <div class="image-item">
+                    <img src="../../framerusercontent.com/images/rxcj5EdxeVzzgEIKKRvj8bjaWM.jpg" alt="Weight gain graph">
+                </div>
+            </div>
+
+            <div class="image-grid reveal-el">
+                <div class="image-item">
+                    <img src="../../framerusercontent.com/images/3CuDKYckXIAxRCgM2y4rUTKX04.jpg" alt="Weight gain graph">
+                </div>
+                <div class="image-item">
+                    <img src="../../framerusercontent.com/images/PqraRK4dHwL3SxxmFBvbrBh84.jpg" alt="Weight gain graph">
+                </div>
+            </div>
+
+            <article class="section-content reveal-el">
+                <p>Each iteration focused on balancing accuracy and usability, ensuring that the graphs were both intuitive and adaptable to user needs.</p>
+                <p>By enabling users to adjust timelines and explore projections interactively, the graphs became a practical tool that connects complex data with actionable insights, giving users a clear view of both current conditions and future expectations for livestock growth.</p>
+            </article>
+
+            <div class="image-grid reveal-el">
+                <div class="image-item">
+                    <img src="../../framerusercontent.com/images/zAf80TSvBqGxZrsJREavldOnxHg.jpg" alt="Weight gain graph">
+                </div>
+                <div class="image-item">
+                    <img src="../../framerusercontent.com/images/0KlRezJ7y1SUxny4I4ZwhqextY.jpg" alt="Weight gain graph">
+                </div>
+            </div>
+
+            <div class="image-full reveal-el">
+                <img src="../../framerusercontent.com/images/3BCoAskF9EzEw0fJL5c6n3TA8.jpg" alt="Weight gain graph">
+            </div>
+
+            <div class="image-full reveal-el">
+                <img src="../../framerusercontent.com/images/a3uvOYrBW2qGtQdtVPTeJONDR9E.jpg" alt="Weight gain graph">
+            </div>
+
+            <div class="image-grid reveal-el">
+                <div class="image-item">
+                    <img src="../../framerusercontent.com/images/w8Y7VmRdjgXKFoAP3wrCRBscDLM.jpg" alt="Weight gain graph">
+                </div>
+                <div class="image-item">
+                    <img src="../../framerusercontent.com/images/KHRYlKx2DpZ0dVff4a1Gcajg0.jpg" alt="Weight gain graph">
+                </div>
+            </div>
+
+            <article class="section-content reveal-el">
+                <h2>Visualizing pasture growth over time</h2>
+                <p>In addition to weight gain insights, I developed tools to represent pasture growth rates, providing users with a clear view of available forage over time. The pasture growth graphs needed to illustrate growth trends and potential fluctuations across different paddocks, allowing users to assess both current and projected pasture quantity and quality.</p>
+                <p>I explored ways to visualize this data, ultimately incorporating features like confidence bands to represent predictive ranges and density shading around median growth rates for intuitive visual feedback. I found it challenging trying to manipulate multiple forms of data that are meant to be represented on the same axis sharing units but in the end I feel like the end result is intuitive.</p>
+            </article>
+
+            <div class="image-full reveal-el">
+                <img src="../../framerusercontent.com/images/06ZZtabFaKuMpAMCIxDaY410QUU.png" alt="Pasture growth graph">
+            </div>
+
+            <div class="image-full reveal-el">
+                <img src="../../framerusercontent.com/images/GkuELHR8DeTWylvQqH10KuZQsA.jpg" alt="Pasture growth graph">
+            </div>
+
+            <div class="image-grid reveal-el">
+                <div class="image-item">
+                    <img src="../../framerusercontent.com/images/Bul93gZmgg5uwm4lsCI4yuysic.jpg" alt="Pasture growth graph">
+                </div>
+                <div class="image-item">
+                    <img src="../../framerusercontent.com/images/F27BwieSCo2WzdKyGkfXzaObQ.jpg" alt="Pasture growth graph">
+                </div>
+            </div>
+
+            <div class="image-grid reveal-el">
+                <div class="image-item">
+                    <img src="../../framerusercontent.com/images/3HWEcwc0oAgqzOnl3lnzLUPfYg.jpg" alt="Pasture growth graph">
+                </div>
+                <div class="image-item">
+                    <img src="../../framerusercontent.com/images/drmg5Evo3M4hyp9Q0xt4ljhf84k.jpg" alt="Pasture growth graph">
+                </div>
+            </div>
+
+            <div class="image-full reveal-el">
+                <img src="../../framerusercontent.com/images/7eDsXgEcChsBmbourE3T7Vzs.jpg" alt="Pasture growth graph">
+            </div>
+
+            <div class="image-grid reveal-el">
+                <div class="image-item">
+                    <img src="../../framerusercontent.com/images/FEhKWc7tXnQ4R86zXLAkXx5NGo.jpg" alt="Pasture growth graph">
+                </div>
+                <div class="image-item">
+                    <img src="../../framerusercontent.com/images/EbsAvuwgJg3bVdytXWxcjYu7Zs.jpg" alt="Pasture growth graph">
+                </div>
+            </div>
+
+            <article class="section-content reveal-el">
+                <p>Each iteration brought enhancements in readability and responsiveness, making it easier for users to track pasture growth over weeks or months.</p>
+                <p>By enabling interactive elements, users could explore different timeframes and projections to better plan grazing strategies. This feature transformed complex growth data into a visually accessible tool, giving users the foresight to make informed decisions about grazing planning.</p>
+            </article>
+
+            <article class="section-content reveal-el">
+                <p>By integrating weight gain and pasture growth visuals into the grazing planning flow, ForageCaster provides users with a complete toolkit for managing livestock and pasture health.</p>
+                <p>These interactive elements allow users to make data-driven grazing decisions, aligning animal growth with pasture availability to optimize land use. This integration empowers users to anticipate outcomes, adjust grazing strategies, and ultimately achieve a balanced, sustainable approach to livestock management.</p>
+            </article>
+
+            <div class="image-grid reveal-el">
+                <div class="image-item">
+                    <img src="../../framerusercontent.com/images/QZVrPWUFjDAey3clBIqxWwWk4I.jpg" alt="Final integration">
+                </div>
+                <div class="image-item">
+                    <img src="../../framerusercontent.com/images/3a0tKZfKrqzDw74zfdU2nZyjb08.jpg" alt="Final integration">
+                </div>
+            </div>
+
+            <div class="image-full reveal-el">
+                <img src="../../framerusercontent.com/images/dUbaUQi8Hn2SDWYNNPDjRQlUb6Y.jpg" alt="Final integration">
+            </div>
+
+            <div class="project-navigation reveal-el">
+                <a href="../drovasignup/index.html" class="project-nav-link">
+                    <svg class="project-nav-arrow" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+                    </svg>
+                    <div>
+                        <span class="project-nav-label">Previous Project</span>
+                        <span class="project-nav-title">Drova Sign Up</span>
+                    </div>
+                </a>
+                <a href="../ggsa/index.html" class="project-nav-link next">
+                    <div>
+                        <span class="project-nav-label">Next Project</span>
+                        <span class="project-nav-title">GGSA</span>
+                    </div>
+                    <svg class="project-nav-arrow" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+                    </svg>
+                </a>
+            </div>
+        </main>
+
+        <footer class="footer-bottom">
+            <p>© 2026 Luke Niccol</p>
+            <p>Sydney, Australia</p>
+        </footer>
+    </div>
+
+    <!-- GSAP -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+    <script>
+        gsap.registerPlugin(ScrollTrigger);
+
+        function initRevealAnimations() {
+            // Set initial visibility
+            gsap.set(".reveal-el", { visibility: "visible" });
+
+            // 1. Hero Entrance
+            const heroTl = gsap.timeline({ defaults: { ease: "power3.out", duration: 1.2 } });
+            heroTl.fromTo(".hero-title", { opacity: 0, y: 40 }, { opacity: 1, y: 0, delay: 0.2 })
+                  .fromTo(".hero-subtitle", { opacity: 0, y: 20 }, { opacity: 1, y: 0 }, "-=0.9")
+                  .fromTo(".hero-meta", { opacity: 0, y: 20 }, { opacity: 1, y: 0 }, "-=0.8");
+
+            // 2. Generic Reveals
+            const reveals = document.querySelectorAll('.reveal-el:not(.hero-title):not(.hero-subtitle):not(.hero-meta)');
+            
+            // Group elements by their parent to apply stagger to grids
+            const groups = new Set();
+            reveals.forEach(el => {
+                if (el.parentElement.classList.contains('image-grid')) {
+                    groups.add(el.parentElement);
+                } else {
+                    gsap.fromTo(el, 
+                        { opacity: 0, y: 40 },
+                        { 
+                            opacity: 1, 
+                            y: 0, 
+                            duration: 1.2, 
+                            ease: "power3.out",
+                            scrollTrigger: {
+                                trigger: el,
+                                start: "top 85%",
+                                toggleActions: "play none none none"
+                            }
+                        }
+                    );
+                }
+            });
+
+            // Animate grids with stagger
+            groups.forEach(grid => {
+                const items = grid.querySelectorAll('.reveal-el');
+                gsap.fromTo(items, 
+                    { opacity: 0, y: 40 },
+                    { 
+                        opacity: 1, 
+                        y: 0, 
+                        duration: 1, 
+                        stagger: 0.15,
+                        ease: "power3.out",
+                        scrollTrigger: {
+                            trigger: grid,
+                            start: "top 85%",
+                            toggleActions: "play none none none"
+                        }
+                    }
+                );
+            });
+
+            // Counter Animation for numbers
+            function animateCounter(element) {
+                const target = parseFloat(element.getAttribute('data-target'));
+                if (isNaN(target)) return;
+                
+                const obj = { val: 0 };
+                gsap.to(obj, {
+                    val: target,
+                    duration: 2,
+                    ease: "power2.out",
+                    onUpdate: () => {
+                        element.innerText = Math.floor(obj.val);
+                    }
+                });
+            }
+
+            // Animate counters when they come into view
+            document.querySelectorAll('.counter-number').forEach(counter => {
+                ScrollTrigger.create({
+                    trigger: counter,
+                    start: "top 85%",
+                    once: true,
+                    onEnter: () => animateCounter(counter)
+                });
+            });
+        }
+
+        window.addEventListener('load', () => {
+            setTimeout(initRevealAnimations, 100);
+        });
+
+        // Theme management
+        function toggleTheme() {
+            const root = document.documentElement;
+            const currentTheme = root.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            let overlay = document.querySelector('.theme-transition-overlay');
+            if (!overlay) {
+                overlay = document.createElement('div');
+                overlay.className = 'theme-transition-overlay';
+                document.body.appendChild(overlay);
+            }
+            
+            overlay.style.background = getComputedStyle(document.body).backgroundColor;
+            overlay.classList.add('active');
+            
+            setTimeout(() => {
+                root.setAttribute('data-theme', newTheme);
+                localStorage.setItem('theme', newTheme);
+                updateThemeIcon(newTheme);
+                
+                overlay.style.background = getComputedStyle(document.body).backgroundColor;
+                
+                setTimeout(() => {
+                    overlay.classList.remove('active');
+                }, 200);
+            }, 150);
+        }
+
+        function updateThemeIcon(theme) {
+            const btns = document.querySelectorAll('.theme-toggle');
+            btns.forEach(btn => {
+                btn.innerHTML = theme === 'dark' 
+                    ? '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>'
+                    : '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>';
+            });
+        }
+
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        updateThemeIcon(savedTheme);
+    </script>
+</body>
+</html>
