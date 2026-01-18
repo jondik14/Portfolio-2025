@@ -14,7 +14,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     
-    <style>
+<style>
         @font-face {
             font-family: 'Cirka';
             src: url('../../fonts/Cirka/Cirka-Regular.woff2') format('woff2');
@@ -537,26 +537,40 @@
             border-top: 1px solid var(--border-default);
             display: flex;
             justify-content: space-between;
+            align-items: center;
+            gap: var(--space-4);
             color: var(--text-muted);
             font-size: 14px;
+        }
+        
+        .footer-bottom a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: color 0.2s ease;
+        }
+        
+        .footer-bottom a:hover {
+            color: var(--accent);
         }
 
         /* Reveal System */
         .js-enabled .reveal-el {
             opacity: 0;
             visibility: hidden;
-        }
-    </style>
+  }
+</style>
 </head>
 <body>
-    <script>
+<script>
         document.documentElement.classList.add('js-enabled');
         setTimeout(() => {
             if (getComputedStyle(document.body).opacity === '0') {
                 document.documentElement.classList.remove('js-enabled');
             }
         }, 3000);
-    </script>
+</script>
 
     <nav class="nav">
         <div class="page-wrapper" style="width: 100%;">
@@ -577,21 +591,25 @@
 
     <div class="page-wrapper">
         <header class="hero">
-            <h1 class="hero-title reveal-el">Rural Property Platform</h1>
-            <p class="hero-subtitle reveal-el">Reimagining property search for rural Australia with advanced filtering, mapping capabilities, and data-rich property profiles.</p>
+            <div class="hero-tag reveal-el">Rural Property Platform</div>
+            <h1 class="hero-title reveal-el">Connecting users to KG2's vast farmer database</h1>
             
             <div class="hero-meta reveal-el">
                 <div class="meta-item">
-                    <span>Role</span>
-                    <span>Product Designer</span>
+                    <span>COMPANY</span>
+                    <span>KG2</span>
                 </div>
                 <div class="meta-item">
-                    <span>Timeline</span>
-                    <span>2023</span>
+                    <span>ROLE</span>
+                    <span>UI designer / developer</span>
                 </div>
                 <div class="meta-item">
-                    <span>Expertise</span>
-                    <span>Responsive Web</span>
+                    <span>EXPERTISE</span>
+                    <span>UI design</span>
+                </div>
+                <div class="meta-item">
+                    <span>YEAR</span>
+                    <span>2023-24</span>
                 </div>
             </div>
         </header>
@@ -602,30 +620,25 @@
             </div>
 
             <article class="section-content reveal-el">
-                <h2>The Challenge</h2>
-                <p>Rural property buyers have vastly different needs than suburban home buyers. They care about water rights, soil quality, carrying capacity, and proximity to saleyards—not school catchments and public transport.</p>
-                <p>Existing property platforms treat rural listings as an afterthought, forcing buyers to piece together critical information from multiple sources.</p>
-            </article>
-
-            <div class="highlight-quote reveal-el">
-                <span class="quote-text">"I spent three months researching a property only to find out the water allocation had been reduced. That information should have been on the listing."</span>
-            </div>
-
-            <article class="section-content reveal-el">
-                <h2>Research Insights</h2>
-                <p>Through interviews with rural property buyers, agents, and agronomists, I identified key pain points:</p>
-                <ul>
-                    <li><strong>Data fragmentation:</strong> Critical property data scattered across government portals, agent listings, and local knowledge.</li>
-                    <li><strong>Map-first thinking:</strong> Rural buyers think in terms of geography, not lists.</li>
-                    <li><strong>Due diligence burden:</strong> Weeks spent gathering information that should be readily available.</li>
-                    <li><strong>Agent dependency:</strong> Over-reliance on agents for information that could be self-served.</li>
-                </ul>
+                <h2>Project description</h2>
+                <div style="margin-bottom: var(--space-8);">
+                    <p><strong>Problem</strong></p>
+                    <p>Users outside the farming community often struggle to access and understand agricultural data, preventing meaningful connections with the agricultural sector and hindering potential growth opportunities. This lack of access to vital information limits their ability to make informed decisions, ultimately stifling engagement and innovation within the industry.</p>
+                </div>
+                <div style="margin-bottom: var(--space-8);">
+                    <p><strong>Solution</strong></p>
+                    <p>The Rural Property Platform addresses this challenge by providing a user-friendly interface that connects these users to KG2's comprehensive agricultural database. By utilizing machine learning, the platform simplifies access to valuable insights about Australia's agricultural landscape, enabling users to easily explore, filter, and interpret data, ultimately empowering them to make informed decisions.</p>
+                </div>
+                <div>
+                    <p><strong>My Role/Responsibilities</strong></p>
+                    <p>I came into the project after the initial designs for the RPP had been completed but KG2 felt they didnt accurately solve the problem their users faced and felt they needed a design that addressed the problem. To do this I had to understand the problem and users to inform my decisions. After my designs were complete I was tasked with developing those designs in VS code to make to product availble for web use.</p>
+                </div>
             </article>
 
             <div class="image-section">
                 <div class="image-grid">
                     <div class="image-item reveal-el">
-                        <img src="../../framerusercontent.com/images/MdGNYIyiuG0kUnUUOHnBp4avuIo.jpg" alt="Initial Sketches">
+                        <img src="../../framerusercontent.com/images/MdGNYIyiuG0kUnUUOHnBp4avuIo.jpg" alt="Sketches">
                     </div>
                     <div class="image-item reveal-el">
                         <img src="../../framerusercontent.com/images/buBbMuzyzbsBGBb4IrokbAZuQM.jpg" alt="Wireframes">
@@ -633,33 +646,25 @@
                 </div>
             </div>
 
-            <article class="section-content reveal-el">
-                <h2>Design Solution</h2>
-                <p>I designed a platform that aggregates rural-specific data and presents it through a map-centric interface. Key features include:</p>
-                <ul>
-                    <li><strong>Property Intelligence Cards:</strong> At-a-glance summaries of water, soil, climate, and infrastructure data.</li>
-                    <li><strong>Comparison Tool:</strong> Side-by-side property comparison with standardized metrics.</li>
-                    <li><strong>Interactive Map Layers:</strong> Toggle between satellite, soil types, rainfall, and property boundaries.</li>
-                    <li><strong>Due Diligence Checklist:</strong> Guided workflow for property assessment.</li>
-                </ul>
-            </article>
-
             <div class="image-full reveal-el">
                 <img src="../../framerusercontent.com/images/Eq53qflcr7iT7PytVmgk3COChI.jpg" alt="Styleguide">
             </div>
 
             <article class="section-content reveal-el">
-                <h2>Iteration & Refinement</h2>
-                <p>As the prototype became more refined, I began iterating on interactions and mapping out key features to showcase the platform’s full potential.</p>
-                
-                <div class="image-grid">
-                    <div class="image-item reveal-el">
-                        <img src="../../framerusercontent.com/images/ebr5t9BvAuiciY8g5IzorwLricg.jpg" alt="Refinement 1">
-                    </div>
-                    <div class="image-item reveal-el">
-                        <img src="../../framerusercontent.com/images/Izp6HTrO44galAuIIkzqgGWi47A.jpg" alt="Refinement 2">
-                    </div>
+                <p>To bring the rural property platform to life, I started by sketching initial concepts to explore layout ideas and functionality. These early sketches helped shape the product's structure, which I refined through wireframes to map out user flows and interactions. Once the wireframes captured the core experience, I developed a basic style guide to establish a cohesive visual language.</p>
+            </article>
+
+            <div class="image-grid">
+                <div class="image-item reveal-el">
+                    <img src="../../framerusercontent.com/images/ebr5t9BvAuiciY8g5IzorwLricg.jpg" alt="High Fidelity Concept 1">
                 </div>
+                <div class="image-item reveal-el">
+                    <img src="../../framerusercontent.com/images/Izp6HTrO44galAuIIkzqgGWi47A.jpg" alt="High Fidelity Concept 2">
+                </div>
+            </div>
+
+            <article class="section-content reveal-el">
+                <p>As the prototype became more refined, I began iterating on interactions and mapping out key features to showcase the platform's full potential. This phase involved exploring user pathways in greater detail, defining how different elements responded to user inputs and ensuring seamless navigation across features. Each iteration brought us closer to a user-centric experience, with interactive elements that highlighted the platform's capabilities. By testing and refining these features, I was able to design an intuitive interface that demonstrated what users could achieve within the platform</p>
             </article>
 
             <div class="image-full reveal-el">
@@ -667,8 +672,15 @@
             </div>
 
             <article class="section-content reveal-el">
-                <h2>High Fidelity & Development</h2>
-                <p>Below are some of the higher-fidelity versions of the RPP I developed. I was responsible for translating the visual elements into HTML and CSS, ensuring each component aligned with specifications while adapting seamlessly across screen sizes.</p>
+                <p>In this phase, I focused on designing microinteractions to enhance user feedback and engagement throughout the platform. These subtle animations and responsive elements were crafted to guide users intuitively, providing real-time feedback as they interacted with different features. These details helped create a more polished, user-friendly interface that not only looked cohesive but also responded dynamically to user actions, adding an extra layer of usability to the platform.</p>
+            </article>
+
+            <article class="section-content reveal-el">
+                <h2>Development</h2>
+                <p>Having only basic experience with HTML, CSS, and JavaScript, this project was a challenging yet rewarding step into the world of product development. Converting my designs into functional code pushed me to learn and refine my skills, especially in responsive design.</p>
+                <p>I was responsible for translating the visual elements into HTML and CSS, ensuring that each component aligned with the design specifications while also adapting seamlessly across different screen sizes using media queries. Although the data handling was managed with the support of the rest of the team, this experience gave me hands-on development practice, and I gained confidence in building accessible, responsive interfaces. Working closely with the team not only strengthened my skills but also taught me valuable best practices in web development.</p>
+                <p><br></p>
+                <p>Below are some of the higher-fidelty versions of the RPP I developed.</p>
                 
                 <div class="image-full reveal-el">
                     <img src="../../framerusercontent.com/images/94ECYTMgibkKb9CIINOzIMVk7EY.jpg" alt="High Fidelity RPP 1">
@@ -686,12 +698,6 @@
                 </div>
             </article>
 
-            <article class="section-content reveal-el">
-                <h2>Outcome</h2>
-                <p>The platform reduced average property research time from 3 weeks to <span class="counter-number" data-target="3">0</span> days. Agents reported higher quality enquiries from better-informed buyers, and the comparison tool became the most-used feature.</p>
-                <p>This project showed me the value of domain expertise in design. Understanding the language and concerns of rural property buyers was essential to creating something genuinely useful.</p>
-            </article>
-
             <div class="project-navigation reveal-el">
                 <a href="../foragecaster/index.html" class="project-nav-link">
                     <svg class="project-nav-arrow" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -702,28 +708,22 @@
                         <span class="project-nav-title">Foragecaster</span>
                     </div>
                 </a>
-                <a href="../shareecoomy/index.html" class="project-nav-link next">
-                    <div>
-                        <span class="project-nav-label">Next Project</span>
-                        <span class="project-nav-title">Share Economy</span>
-                    </div>
-                    <svg class="project-nav-arrow" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
-                    </svg>
-                </a>
             </div>
         </main>
 
         <footer class="footer-bottom">
-            <p>© 2026 Luke Niccol</p>
-            <p>Sydney, Australia</p>
+            <div>
+                <p>© 2026 Luke Niccol</p>
+                <p>Sydney, Australia</p>
+            </div>
+            <a href="../../index.html" style="color: var(--text-secondary); text-decoration: none; font-size: 14px; font-weight: 500; transition: color 0.2s ease;">← Home</a>
         </footer>
     </div>
 
     <!-- GSAP -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-
+    
     <script>
         gsap.registerPlugin(ScrollTrigger);
 

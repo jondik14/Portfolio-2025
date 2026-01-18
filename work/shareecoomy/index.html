@@ -413,12 +413,25 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            gap: var(--space-4);
         }
 
         .footer-bottom p {
             font-size: 14px;
             color: var(--text-muted);
             font-weight: 500;
+        }
+        
+        .footer-bottom a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: color 0.2s ease;
+        }
+        
+        .footer-bottom a:hover {
+            color: var(--accent);
         }
 
         @media (max-width: 768px) {
@@ -531,8 +544,11 @@
 </div>
 
             <div class="footer-bottom">
-                <p>© 2026 Luke Niccol</p>
-                <p>Sydney, Australia</p>
+                <div>
+                    <p>© 2026 Luke Niccol</p>
+                    <p>Sydney, Australia</p>
+                </div>
+                <a href="../../index.html" style="color: var(--text-secondary); text-decoration: none; font-size: 14px; font-weight: 500; transition: color 0.2s ease;">← Home</a>
             </div>
         </div>
     </footer>

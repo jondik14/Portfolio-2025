@@ -660,8 +660,22 @@
             border-top: 1px solid var(--border-default);
             display: flex;
             justify-content: space-between;
+            align-items: center;
+            gap: var(--space-4);
             color: var(--text-muted);
             font-size: 14px;
+        }
+        
+        .footer-bottom a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: color 0.2s ease;
+        }
+        
+        .footer-bottom a:hover {
+            color: var(--accent);
         }
 
         /* Reveal System */
@@ -905,8 +919,11 @@
         </main>
 
         <footer class="footer-bottom">
-            <p>© 2026 Luke Niccol</p>
-            <p>Sydney, Australia</p>
+            <div>
+                <p>© 2026 Luke Niccol</p>
+                <p>Sydney, Australia</p>
+            </div>
+            <a href="../../index.html" style="color: var(--text-secondary); text-decoration: none; font-size: 14px; font-weight: 500; transition: color 0.2s ease;">← Home</a>
         </footer>
     </div>
 

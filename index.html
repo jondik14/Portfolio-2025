@@ -675,9 +675,13 @@
         @media (min-width: 769px) {
             .top-controls {
                 position: fixed;
-                top: var(--space-4);
+                top: calc(96px / 2 - 24px); /* Center vertically with nav height (96px) */
                 right: var(--space-4);
                 z-index: 1100;
+            }
+            
+            .nav-info {
+                padding-right: 70px; /* Add space to prevent overlap with theme toggle */
             }
         }
 
@@ -824,13 +828,17 @@
 
         .cta-primary {
             padding: var(--space-3) var(--space-8);
-            background: var(--text-primary);
-            color: var(--surface);
+            background: var(--accent);
+            color: #ffffff;
             border-radius: var(--radius-full);
             font-weight: 500;
             font-size: var(--text-base);
             text-decoration: none;
             transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-2);
+            border: none;
         }
 
         .cta-primary:hover {
@@ -838,17 +846,37 @@
             transform: translateY(-2px);
         }
 
+        .cta-primary:active {
+            border-radius: var(--radius-full);
+            transform: translateY(0);
+        }
+
+        .cta-primary svg {
+            width: 20px;
+            height: 20px;
+            fill: currentColor;
+        }
+
         .cta-secondary {
-            color: var(--text-secondary);
+            color: var(--accent);
             font-weight: 500;
             font-size: var(--text-base);
             text-decoration: none;
             transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-2);
         }
 
         .cta-secondary:hover {
-            color: var(--text-primary);
+            opacity: 0.8;
             transform: translateX(4px);
+        }
+
+        .cta-secondary svg {
+            width: 20px;
+            height: 20px;
+            fill: currentColor;
         }
 
         @media (max-width: 900px) {
@@ -2047,8 +2075,18 @@
                     <h1 class="hero-title heading-animate">I find the fastest path from problem to product.</h1>
                     <h2 class="hero-subtitle">By understanding people and systems, I design clear, scalable solutions that actually ship.</h2>
                     <div class="hero-cta">
-                        <a href="mailto:luke.niccol@hotmail.com" class="cta-primary">Email me</a>
-                        <a href="https://www.linkedin.com/in/luke-niccol-479489220/" target="_blank" class="cta-secondary">LinkedIn</a>
+                        <a href="mailto:luke.niccol@hotmail.com" class="cta-primary">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+                            </svg>
+                            Email me
+                        </a>
+                        <a href="https://www.linkedin.com/in/luke-niccol-479489220/" target="_blank" class="cta-secondary">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                            </svg>
+                            LinkedIn
+                        </a>
                     </div>
                 </div>
                 <div class="portrait-wrapper animate-scale animate-delay-2">
@@ -2475,7 +2513,7 @@
         }
 
         // Initialize Theme
-        const savedTheme = localStorage.getItem('theme') || 'light';
+        const savedTheme = localStorage.getItem('theme') || 'dark';
         document.documentElement.setAttribute('data-theme', savedTheme);
         updateThemeIcon(savedTheme);
 

@@ -704,29 +704,6 @@
                 line-height: 1.2;
             }
         }
-            color: var(--surface);
-        }
-
-        .project-nav-info {
-            display: flex;
-            flex-direction: column;
-            gap: var(--space-1);
-        }
-
-        .project-nav-label {
-            font-size: 12px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            color: var(--text-muted);
-        }
-
-        .project-nav-title {
-            font-family: var(--font-serif);
-            font-size: clamp(1.5rem, 3vw, 2.5rem);
-            color: var(--text-primary);
-            font-weight: 400;
-        }
 
         /* ===== FOOTER REFINEMENT ===== */
         .footer {
@@ -796,6 +773,11 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            gap: var(--space-4);
+        }
+        
+        .footer-bottom a:hover {
+            color: var(--accent);
         }
 
         .footer-bottom p {
@@ -1073,8 +1055,11 @@
             </div>
 
             <div class="footer-bottom">
-                <p>© 2026 Luke Niccol</p>
-                <p>Sydney, Australia</p>
+                <div>
+                    <p>© 2026 Luke Niccol</p>
+                    <p>Sydney, Australia</p>
+                </div>
+                <a href="../../index.html" style="color: var(--text-secondary); text-decoration: none; font-size: 14px; font-weight: 500; transition: color 0.2s ease;">← Home</a>
             </div>
         </div>
     </footer>
