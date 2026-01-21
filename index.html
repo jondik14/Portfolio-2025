@@ -195,6 +195,26 @@
             pointer-events: auto;
         }
 
+        /* Hero: hidden until entrance animation (avoids jolt on load) */
+        html.hero-loading .nav-container,
+        html.hero-loading .hero-title,
+        html.hero-loading .hero-subtitle,
+        html.hero-loading .hero-cta,
+        html.hero-loading .portrait-wrapper {
+            opacity: 0;
+            transform: translateY(14px);
+        }
+
+        /* Below-hero: hidden until hero has animated (top-down sequence) */
+        html.hero-loading #tools,
+        html.hero-loading #work,
+        html.hero-loading #library,
+        html.hero-loading #instagram,
+        html.hero-loading .footer {
+            opacity: 0;
+            visibility: hidden;
+        }
+
         /* Add transitions to theme-dependent elements */
         h1, h2, h3, h4, h5, h6, p, span, a, div, section, article, nav, header, footer, button, input, textarea, select {
             transition: background-color 0.4s cubic-bezier(0.4, 0, 0.2, 1),
@@ -267,25 +287,6 @@
         .page-wrapper {
             position: relative;
             z-index: 10;
-        }
-
-        /* ===== REVEAL SYSTEM (Framer Motion style) ===== */
-        .js-enabled .nav-container,
-        .js-enabled .hero-title,
-        .js-enabled .hero-subtitle,
-        .js-enabled .hero-cta,
-        .js-enabled .portrait-wrapper,
-        .js-enabled .section-header,
-        .js-enabled .tools-title,
-        .js-enabled .tools-subtitle,
-        .js-enabled .tool-card,
-        .js-enabled .work-item,
-        .js-enabled .reading-room-card,
-        .js-enabled .instagram-description,
-        .js-enabled .instagram-fullbleed,
-        .js-enabled .footer-col {
-            opacity: 0;
-            visibility: hidden;
         }
 
         /* ===== SCROLL ANIMATIONS (Legacy fallback) ===== */
@@ -2012,15 +2013,7 @@
     </style>
 </head>
 <body>
-    <script>
-        document.documentElement.classList.add('js-enabled');
-        // Failsafe: if animations don't start, show content after 3s
-        setTimeout(() => {
-            if (getComputedStyle(document.querySelector('.hero-title')).visibility === 'hidden') {
-                document.documentElement.classList.remove('js-enabled');
-            }
-        }, 3000);
-    </script>
+    <script>document.documentElement.classList.add('hero-loading');</script>
     <!-- Hexagon Grid Background -->
     <div class="hexagon-background" id="hexBackground">
         <svg id="hexSvg" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" width="100%" height="100%">
@@ -2072,7 +2065,7 @@
         <section id="about">
             <div class="about-grid grid-layout">
                 <div class="hero-text">
-                    <h1 class="hero-title heading-animate">I find the fastest path from problem to product.</h1>
+                    <h1 class="hero-title">I find the fastest path from problem to product.</h1>
                     <h2 class="hero-subtitle">By understanding people and systems, I design clear, scalable solutions that actually ship.</h2>
                     <div class="hero-cta">
                         <a href="mailto:luke.niccol@hotmail.com" class="cta-primary">
@@ -2089,7 +2082,7 @@
                         </a>
                     </div>
                 </div>
-                <div class="portrait-wrapper animate-scale animate-delay-2">
+                <div class="portrait-wrapper">
                     <img src="coloured headshot.png" alt="Luke Niccol" class="headshot-img">
                 </div>
             </div>
@@ -2856,43 +2849,28 @@
         // ===== REVEAL ANIMATIONS (GSAP) =====
         gsap.registerPlugin(ScrollTrigger);
 
-        function initRevealAnimations() {
-            // Set initial visibility for all animated elements
-            gsap.set(".nav-container, .hero-title, .hero-subtitle, .hero-cta, .portrait-wrapper, .section-header, .tools-title, .tools-subtitle, .tool-card, .work-item, .reading-room-card, .instagram-description, .instagram-fullbleed, .footer-col", { 
-                visibility: "visible" 
+        // Hero entrance: small delay after load, then smooth fade+slide in (avoids jolt)
+        function initHeroEntrance() {
+            var root = document.documentElement;
+            if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                root.classList.remove('hero-loading');
+                return;
+            }
+            gsap.to([".nav-container", ".hero-title", ".hero-subtitle", ".hero-cta", ".portrait-wrapper"], {
+                opacity: 1,
+                y: 0,
+                duration: 0.7,
+                ease: "power2.out",
+                stagger: 0.06,
+                onComplete: function() { root.classList.remove('hero-loading'); }
             });
+            // Fallback: show hero if animation never completes (e.g. GSAP error)
+            setTimeout(function() { root.classList.remove('hero-loading'); }, 2500);
+        }
 
-            // 0. Nav Entrance
-            gsap.fromTo(".nav-container",
-                { y: -20, opacity: 0 },
-                { y: 0, opacity: 1, duration: 1, ease: "power3.out", delay: 0.1 }
-            );
-
-            // 1. Hero Entrance
-            const heroTl = gsap.timeline({ defaults: { ease: "power3.out", duration: 1.2 } });
-            heroTl.fromTo(".hero-title", 
-                { opacity: 0, y: 40 }, 
-                { opacity: 1, y: 0, delay: 0.3 }
-            )
-            .fromTo(".hero-subtitle", 
-                { opacity: 0, y: 30 }, 
-                { opacity: 1, y: 0 }, 
-                "-=0.9"
-            )
-            .fromTo(".hero-cta", 
-                { opacity: 0, y: 20 }, 
-                { opacity: 1, y: 0 }, 
-                "-=0.8"
-            )
-            .fromTo(".portrait-wrapper", 
-                { opacity: 0, scale: 0.92, y: 30 }, 
-                { opacity: 1, scale: 1, y: 0, duration: 1.4 }, 
-                "-=1.1"
-            );
-
-            // 2. Generic Reveal on Scroll
-            const revealElements = document.querySelectorAll('.section-header, .tools-title, .tools-subtitle, .reading-room-card, .instagram-description, .instagram-fullbleed');
-            
+        function initRevealAnimations() {
+            // 1. Reveal on Scroll – trigger at "top 100%" so sections animate as they enter the viewport (earlier, more reliable)
+            const revealElements = document.querySelectorAll('.section-header, .tools-title, .tools-subtitle, .reading-room-card, .instagram-description');
             revealElements.forEach(el => {
                 gsap.fromTo(el, 
                     { opacity: 0, y: 40 },
@@ -2903,12 +2881,30 @@
                         ease: "power3.out",
                         scrollTrigger: {
                             trigger: el,
-                            start: "top 88%",
+                            start: "top 100%",
                             toggleActions: "play none none none"
                         }
                     }
                 );
             });
+
+            // 2. Instagram posts grid – animate only y (no opacity) so Behold widget can load; use #instagram as trigger so it works before widget height is known
+            const instagramFullbleed = document.querySelector('.instagram-fullbleed');
+            if (instagramFullbleed) {
+                gsap.fromTo(instagramFullbleed, 
+                    { y: 50 },
+                    { 
+                        y: 0, 
+                        duration: 1.2, 
+                        ease: "power3.out",
+                        scrollTrigger: {
+                            trigger: "#instagram",
+                            start: "top 100%",
+                            toggleActions: "play none none none"
+                        }
+                    }
+                );
+            }
 
             // 3. Staggered Tool Cards
             gsap.fromTo(".tool-card", 
@@ -2921,7 +2917,7 @@
                     ease: "power3.out",
                     scrollTrigger: {
                         trigger: ".tools-grid",
-                        start: "top 82%",
+                        start: "top 100%",
                         toggleActions: "play none none none"
                     }
                 }
@@ -2938,44 +2934,34 @@
                         ease: "power4.out",
                         scrollTrigger: {
                             trigger: item,
-                            start: "top 82%",
+                            start: "top 100%",
                             toggleActions: "play none none none"
                         }
                     }
                 );
             });
 
-            // 5. Footer Stagger
-            gsap.fromTo(".footer-col", 
-                { opacity: 0, y: 30 },
-                { 
-                    opacity: 1, 
-                    y: 0, 
-                    duration: 1, 
-                    stagger: 0.12,
-                    ease: "power3.out",
-                    scrollTrigger: {
-                        trigger: ".footer",
-                        start: "top 92%",
-                        toggleActions: "play none none none"
-                    }
-                }
-            );
+            // Footer: no scroll animation – footer-cols are shown by default so nav/links always appear (ScrollTrigger at page bottom was unreliable)
+
+            // Recalc ScrollTrigger after dynamic content (e.g. Behold widget) changes layout
+            setTimeout(function() { ScrollTrigger.refresh(); }, 500);
+            setTimeout(function() { ScrollTrigger.refresh(); }, 2500);
         }
 
-        // Initialize animations
+        // Hero entrance: 400ms after load, then animate in
+        if (document.readyState === 'complete') {
+            setTimeout(initHeroEntrance, 400);
+        } else {
+            window.addEventListener('load', function() { setTimeout(initHeroEntrance, 400); });
+        }
+
+        // Initialize scroll-triggered reveal animations
         if (document.readyState === 'complete') {
             setTimeout(initRevealAnimations, 100);
         } else {
-            window.addEventListener('load', () => {
+            window.addEventListener('load', function() {
                 setTimeout(initRevealAnimations, 100);
             });
-            // Secondary fallback for slow connections
-            setTimeout(() => {
-                if (getComputedStyle(document.querySelector('.hero-title')).visibility === 'hidden') {
-                    initRevealAnimations();
-                }
-            }, 1500);
         }
 
         // ===== OLD SCROLL ANIMATION OBSERVER (Disabled in favor of GSAP) =====
