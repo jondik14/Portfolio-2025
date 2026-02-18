@@ -1,0 +1,1067 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drova Sign Up Channel — Luke Niccol</title>
+    <meta name="description" content="From Sales-Led to Product-Led: Designing a smarter onboarding path for equipment finance customers.">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="../../Logo black bg.png">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        @font-face {
+            font-family: 'Cirka';
+            src: url('../../fonts/Cirka/Cirka-Regular.woff2') format('woff2');
+            font-weight: 400;
+            font-style: normal;
+            font-display: swap;
+        }
+        @font-face {
+            font-family: 'Cirka';
+            src: url('../../fonts/Cirka/Cirka-Bold.woff2') format('woff2');
+            font-weight: 700;
+            font-style: normal;
+            font-display: swap;
+        }
+
+        :root {
+            --font-sans: 'Instrument Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            --font-serif: 'DM Serif Display', Georgia, serif;
+            --font-heading: 'Cirka', Georgia, serif;
+            
+            --space-1: 8px;
+            --space-2: 16px;
+            --space-3: 24px;
+            --space-4: 32px;
+            --space-5: 40px;
+            --space-6: 48px;
+            --space-8: 64px;
+            --space-10: 80px;
+            --space-12: 96px;
+            --space-16: 128px;
+            --space-20: 160px;
+            
+            --radius-lg: 20px;
+            --radius-xl: 24px;
+            --radius-2xl: 32px;
+            --radius-full: 9999px;
+            
+            --text-primary: #111522;
+            --text-secondary: #4a5585;
+            --text-muted: #6b779c;
+            --accent: #0070cc;
+            --surface: #ffffff;
+            --surface-elevated: #f9fafc;
+            --border-subtle: rgba(0, 0, 0, 0.04);
+            --border-default: rgba(0, 0, 0, 0.08);
+            
+            --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.06);
+        }
+
+        [data-theme="dark"] {
+            --text-primary: #f8f9fc;
+            --text-secondary: #b0b9e0;
+            --text-muted: #8b99cf;
+            --accent: #4dafff;
+            --surface: #0a0a14;
+            --surface-elevated: #11111f;
+            --border-subtle: rgba(255, 255, 255, 0.03);
+            --border-default: rgba(255, 255, 255, 0.08);
+        }
+
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-sans);
+            font-size: 18px;
+            color: var(--text-primary);
+            background: var(--surface);
+            line-height: 1.7;
+            font-weight: 400;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .page-wrapper {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 var(--space-6);
+        }
+
+        .grid-layout {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: var(--space-6);
+            width: 100%;
+        }
+
+        @media (max-width: 768px) {
+            .nav {
+                height: 64px;
+            }
+            .nav-inner {
+                padding: 0 var(--space-4);
+            }
+            .nav-logo {
+                font-size: 16px;
+                display: block !important;
+            }
+            .nav-right {
+                display: flex !important;
+                gap: var(--space-3);
+            }
+            .nav-back {
+                font-size: 13px;
+                display: flex !important;
+            }
+            .theme-toggle {
+                width: 36px;
+                height: 36px;
+                flex-shrink: 0;
+            }
+            .hero {
+                padding-top: var(--space-12);
+            }
+            .hero-title {
+                font-size: clamp(2.5rem, 12vw, 3.75rem);
+            }
+            .grid-layout {
+                grid-template-columns: repeat(4, 1fr);
+                gap: var(--space-4);
+            }
+            .page-wrapper {
+                padding: 0 var(--space-6);
+            }
+        }
+
+        /* Navigation */
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 96px;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        [data-theme="dark"] .nav {
+            background: rgba(10, 10, 20, 0.8);
+        }
+
+        .nav-inner {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: var(--space-4);
+        }
+
+        .theme-toggle {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: var(--radius-full);
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 1px solid var(--border-default);
+            background: var(--surface);
+        }
+
+        .theme-toggle:hover {
+            color: var(--text-primary);
+            border-color: var(--accent);
+            background: var(--surface-elevated);
+        }
+
+        .theme-transition-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 9999;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .theme-transition-overlay.active {
+            opacity: 1;
+        }
+
+        .nav-logo {
+            font-family: var(--font-heading);
+            font-weight: 700;
+            font-size: 1.25rem;
+            text-decoration: none;
+            color: var(--text-primary);
+            letter-spacing: -0.02em;
+        }
+
+        .nav-back {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        .nav-back svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        .nav-back span {
+            display: none;
+        }
+
+        @media (min-width: 769px) {
+            .nav-back span {
+                display: inline;
+            }
+        }
+
+        .nav-back:hover {
+            color: var(--accent);
+        }
+
+        /* Hero */
+        .hero {
+            padding-top: var(--space-20);
+            padding-bottom: var(--space-12);
+            max-width: 1000px;
+        }
+
+        .hero-tag {
+            font-size: 14px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--accent);
+            margin-bottom: var(--space-4);
+            display: inline-block;
+            background: rgba(0, 112, 204, 0.1);
+            padding: 4px 12px;
+            border-radius: var(--radius-full);
+        }
+
+        [data-theme="dark"] .hero-tag {
+            background: rgba(77, 175, 255, 0.1);
+        }
+
+        .hero-title {
+            font-family: var(--font-serif);
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            line-height: 1.1;
+            margin-bottom: var(--space-6);
+            font-weight: 400;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1.125rem, 2vw, 1.5rem);
+            color: var(--text-secondary);
+            max-width: 800px;
+            margin-bottom: var(--space-10);
+        }
+
+        .hero-meta {
+            padding-top: var(--space-8);
+            border-top: 1px solid var(--border-default);
+            display: flex;
+            gap: var(--space-12);
+            flex-wrap: wrap;
+        }
+
+        .meta-item span:first-child {
+            display: block;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 4px;
+        }
+
+        .meta-item span:last-child {
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        /* Images */
+        .image-full {
+            width: 100%;
+            margin: var(--space-12) 0;
+            border-radius: 4px;
+            overflow: hidden;
+            border: 1px solid var(--border-subtle);
+            background: var(--surface-elevated);
+        }
+
+        .image-full img {
+            width: 100%;
+            display: block;
+        }
+
+        /* Invert specific image in dark mode */
+        [data-theme="dark"] .image-full img[src*="wHLmIpho4Ptr5beF3GgwKQcTg2Af719"] {
+            filter: invert(1);
+        }
+
+        .image-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: var(--space-6);
+            margin: var(--space-12) 0;
+        }
+
+        @media (max-width: 768px) {
+            .image-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .image-item {
+            border-radius: 4px;
+            overflow: hidden;
+            border: 1px solid var(--border-subtle);
+            background: var(--surface-elevated);
+        }
+
+        [data-theme="dark"] .image-item,
+        [data-theme="dark"] .image-full {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .image-item img {
+            width: 100%;
+            display: block;
+        }
+
+        /* Content */
+        .section-content {
+            max-width: 800px;
+            margin: var(--space-20) 0;
+        }
+
+        @media (max-width: 768px) {
+            .section-content {
+                margin: var(--space-8) 0;
+            }
+            .section-content p {
+                margin-bottom: var(--space-4);
+            }
+            .image-full {
+                margin: var(--space-6) 0;
+            }
+            .image-grid {
+                margin: var(--space-6) 0;
+            }
+            .highlight-quote {
+                margin: var(--space-8) 0;
+                padding: var(--space-8) 0;
+            }
+            .hero {
+                padding-bottom: var(--space-8);
+            }
+        }
+
+        .section-content h2 {
+            font-family: var(--font-heading);
+            font-size: var(--space-6);
+            margin-bottom: var(--space-6);
+            letter-spacing: -0.02em;
+            position: relative;
+            padding-left: var(--space-2);
+        }
+
+        .section-content h2::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: var(--accent);
+            border-radius: 2px;
+        }
+
+        .section-content p {
+            margin-bottom: var(--space-6);
+            color: var(--text-secondary);
+            font-size: 1.125rem;
+        }
+
+        .section-content ul {
+            margin-bottom: var(--space-8);
+            padding-left: var(--space-6);
+        }
+
+        .section-content li {
+            margin-bottom: var(--space-3);
+            color: var(--text-secondary);
+        }
+
+        .image-caption {
+            text-align: left;
+            color: var(--text-muted);
+            font-size: 14px;
+            margin-top: var(--space-4);
+            margin-bottom: var(--space-12);
+        }
+
+        /* Stats */
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: var(--space-6);
+            margin: var(--space-12) 0;
+            padding: var(--space-10);
+            background: var(--surface-elevated);
+            border-radius: var(--radius-2xl);
+            border: 1px solid var(--border-default);
+        }
+
+        @media (max-width: 640px) {
+            .stats-container {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+        }
+
+        .stat-item {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .stat-value {
+            font-family: var(--font-heading);
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--accent);
+            line-height: 1;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+        }
+
+        /* Quotes */
+        .highlight-quote {
+            padding: var(--space-16) 0;
+            border-top: 1px solid var(--border-default);
+            border-bottom: 1px solid var(--border-default);
+            border-left: 4px solid var(--accent);
+            margin: var(--space-20) 0;
+            padding-left: var(--space-6);
+            background: linear-gradient(to right, rgba(0, 112, 204, 0.05), transparent);
+        }
+
+        [data-theme="dark"] .highlight-quote {
+            background: linear-gradient(to right, rgba(77, 175, 255, 0.1), transparent);
+        }
+
+        .quote-text {
+            font-family: var(--font-serif);
+            font-size: clamp(1.5rem, 4vw, 2.5rem);
+            line-height: 1.2;
+            color: var(--text-primary);
+            font-style: italic;
+        }
+
+        .quote-text .metric-number {
+            color: var(--accent);
+            font-weight: 700;
+            font-style: normal;
+        }
+
+        /* Blue accent highlights */
+        .section-content h2 {
+            position: relative;
+            padding-left: var(--space-2);
+        }
+
+        .section-content h2::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: var(--accent);
+            border-radius: 2px;
+        }
+
+        /* Number counter animation */
+        .counter-number {
+            display: inline-block;
+            color: var(--accent);
+            font-weight: 700;
+        }
+
+        .quote-author {
+            display: block;
+            margin-top: var(--space-6);
+            font-weight: 600;
+            color: var(--text-secondary);
+            font-family: var(--font-sans);
+            font-style: normal;
+            font-size: 1rem;
+        }
+
+        /* Footer Nav */
+        .project-navigation {
+            display: flex;
+            justify-content: space-between;
+            gap: var(--space-6);
+            margin: var(--space-20) 0;
+        }
+
+        .project-nav-link {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            padding: var(--space-4);
+            background: var(--surface-elevated);
+            border: 1px solid var(--border-default);
+            border-radius: var(--radius-xl);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            position: relative;
+            min-width: 0;
+            overflow: hidden;
+        }
+
+        .project-nav-link > div {
+            min-width: 0;
+            flex: 1;
+        }
+
+        .project-nav-link:hover {
+            border-color: var(--accent);
+            transform: translateY(-2px);
+            background: var(--surface);
+        }
+
+        .project-nav-link.next {
+            text-align: right;
+            align-items: flex-end;
+        }
+
+        .project-nav-link.next > div {
+            text-align: right;
+        }
+
+        .project-nav-label {
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            letter-spacing: 0.05em;
+            line-height: 1.2;
+            white-space: nowrap;
+        }
+
+        .project-nav-title {
+            font-family: var(--font-heading);
+            font-size: 1.1rem;
+            color: var(--text-primary);
+            line-height: 1.3;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            hyphens: auto;
+        }
+
+        .project-nav-arrow {
+            display: none;
+            width: 20px;
+            height: 20px;
+            color: var(--accent);
+            flex-shrink: 0;
+        }
+
+        @media (max-width: 768px) {
+            .project-navigation {
+                margin: var(--space-12) 0;
+                gap: var(--space-4);
+            }
+
+            .project-nav-link {
+                padding: var(--space-3);
+                flex-direction: row;
+                align-items: center;
+                gap: var(--space-2);
+                min-width: 0;
+            }
+
+            .project-nav-link > div {
+                min-width: 0;
+                flex: 1;
+                overflow: hidden;
+            }
+
+            .project-nav-link.next {
+                flex-direction: row-reverse;
+            }
+
+            .project-nav-link.next > div {
+                text-align: left;
+            }
+
+            .project-nav-arrow {
+                display: block;
+            }
+
+            .project-nav-label {
+                font-size: 9px;
+                white-space: nowrap;
+            }
+
+            .project-nav-title {
+                font-size: 0.9rem;
+                line-height: 1.2;
+            }
+        }
+
+        .footer-bottom {
+            padding: var(--space-10) 0;
+            border-top: 1px solid var(--border-default);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: var(--space-4);
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+        
+        .footer-bottom a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: color 0.2s ease;
+        }
+        
+        .footer-bottom a:hover {
+            color: var(--accent);
+        }
+
+        /* Reveal System */
+        .js-enabled .reveal-el {
+            opacity: 0;
+            visibility: hidden;
+        }
+    </style>
+</head>
+<body>
+    <script>
+        document.documentElement.classList.add('js-enabled');
+        setTimeout(() => {
+            if (getComputedStyle(document.body).opacity === '0') {
+                document.documentElement.classList.remove('js-enabled');
+            }
+        }, 3000);
+    </script>
+
+    <nav class="nav">
+        <div class="page-wrapper" style="width: 100%;">
+            <div class="nav-inner">
+                <a href="../../index.html" class="nav-logo">Luke Niccol</a>
+                <div class="nav-right">
+                    <a href="../../index.html" class="nav-back">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                        <span>Home</span>
+                    </a>
+                    <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle dark mode" type="button">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="page-wrapper">
+        <header class="hero">
+            <h1 class="hero-title reveal-el">From Sales-Led to Product-Led: A Smarter Path for Customers</h1>
+            
+            <div class="hero-meta reveal-el">
+                <div class="meta-item">
+                    <span>COMPANY</span>
+                    <span>Drova</span>
+                </div>
+                <div class="meta-item">
+                    <span>ROLE</span>
+                    <span>Product Designer</span>
+                </div>
+                <div class="meta-item">
+                    <span>EXPERTISE</span>
+                    <span>UX/UI design, </span>
+                </div>
+                <div class="meta-item">
+                    <span>YEAR</span>
+                    <span>2025</span>
+                </div>
+            </div>
+        </header>
+
+        <main>
+            <article class="section-content reveal-el">
+                <h2>Overview</h2>
+                <p>I worked with Drova during a pivotal stage of their growth. The company was transitioning from a <strong>sales-led model to a product-led growth (PLG) strategy</strong>, and my focus was on redesigning the signup channel. The main objective was to <strong>capture the right information from customers as quickly as possible</strong> and, using AI-driven profiling, get them into the product fast with a free trial.</p>
+                <p>This required me to quickly understand existing workflows, align with business objectives, and design an experience that balanced <strong>ease for SME leaders with the company's need for actionable data</strong>. The result was a <strong>frictionless signup flow</strong> that reduced barriers, supported Drova's PLG goals, and opened a clearer path for customers to explore and convert.</p>
+            </article>
+
+            <article class="section-content reveal-el">
+                <h2>My role / responsibilities</h2>
+                <p>As the <strong>Product Designer</strong>, I was responsible for shaping the end-to-end user journey from potential customer to engaged trial user. I collaborated closely with product managers, engineers, and the marketing team to ensure the signup experience balanced <strong>business objectives with user needs</strong>.</p>
+                <p>My focus areas included:</p>
+                <ul>
+                    <li>Early <strong>research and discovery</strong> to understand SME leaders' expectations and pain points.</li>
+                    <li>Translating insights into a <strong>frictionless user experience</strong> that reduced barriers to signup.</li>
+                    <li>Designing a <strong>clean, intuitive UI</strong> that reflected Drova's brand and growth ambitions.</li>
+                    <li>Aligning with cross-functional teams to make sure the solution was feasible, impactful, and scalable.</li>
+                </ul>
+                <p>Through this role, I helped deliver a signup flow that supported Drova's <strong>product-led growth strategy</strong> while providing a smoother, more engaging path for customers.</p>
+            </article>
+
+            <div class="image-full reveal-el">
+                <img src="../../framerusercontent.com/images/6e9Dt4iyz87k6QpMFfc7MiQs0ae48.png" alt="Drova Sign Up Interface">
+            </div>
+
+            <article class="section-content reveal-el">
+                <h2>Problem</h2>
+                <p>At the time, Drova's website relied on <strong>"Contact Us" forms</strong> instead of free trials. SME leaders had to go through sales before ever seeing the product, which slowed adoption and created friction.</p>
+                <p>The bigger challenge, however, was <strong>defining the real problem to solve first</strong>. There were broad conversations about whether we needed a full website redesign or smaller fixes to the existing site. Each team had its own priorities, and without alignment we risked running in circles. We needed to decide what would create the most impact in the shortest time and focus on that as the first step toward product-led growth.</p>
+            </article>
+
+            <div class="highlight-quote reveal-el">
+                <span class="quote-text">The path to Drova was too slow and too heavy. Every extra step risked losing the customer before they ever saw the product.</span>
+            </div>
+
+            <div class="image-full reveal-el">
+                <img src="../../framerusercontent.com/images/wHLmIpho4Ptr5beF3GgwKQcTg2Af719.png" alt="User Flow Diagram">
+            </div>
+
+            <article class="section-content reveal-el">
+                <h2>Exploration & Scope</h2>
+                <p>Early on, it was difficult to define the main problem. Some of us pushed for a full website redesign, while others focused on fixing the signup flow. I created <strong>v0 website prototypes</strong> and mapped out <strong>interaction diagrams and user flows</strong> to test different directions and bring clarity to the discussion.</p>
+            </article>
+
+            <div class="image-grid">
+                <div class="image-item reveal-el">
+                    <img src="../../framerusercontent.com/images/TNagJ0vjTJGVK32E88biYN8J5p0d731.png" alt="Early prototyping work">
+                </div>
+                <div class="image-item reveal-el">
+                    <img src="../../framerusercontent.com/images/xIqUqmdVryMowMpSC03UqsxuyKI95ff.png" alt="Early prototyping work">
+                </div>
+            </div>
+
+            <p class="section-content reveal-el" style="text-align: left; color: var(--text-muted); font-size: 14px; margin-top: var(--space-4); margin-bottom: var(--space-12);">Some of my early prototyping work done in v0 during early exploration of the problem</p>
+
+            <article class="section-content reveal-el">
+                <p>Through this process, we realised that a new site would take months and would not immediately solve the most urgent issue: customers still had to click <strong>"Contact Us"</strong> and wait for sales before ever touching the product.</p>
+            </article>
+
+            <div class="image-full reveal-el">
+                <img src="../../framerusercontent.com/images/lSPzj3oxBvmryBXsEuA1LWBZKHc88dd.png" alt="Interaction Diagram">
+            </div>
+
+            <article class="section-content reveal-el">
+                <p>By reframing the scope around the <strong>online signup challenge</strong>, we were able to align PMs, engineers, and marketing on a clear priority. This shift meant the team stopped running in circles and could deliver faster. The decision was made to leave the website redesign for later in the year, and instead focus on implementing the <strong>self-serve signup flow</strong> that would push Drova towards product-led growth</p>
+            </article>
+
+            <div class="image-full reveal-el">
+                <img src="../../framerusercontent.com/images/mR6dlmZA0fbcHj2xAQCj9B8cz08324.png" alt="Interaction Diagram Detail">
+            </div>
+
+            <article class="section-content reveal-el">
+                <p>We mapped the signup flow into a detailed diagram, categorised into user interactions, screens, and system requests; a crucial step that helped engineers understand system behavior and gave PMs and designers a shared view to collaborate effectively.</p>
+            </article>
+
+            <div class="image-full reveal-el">
+                <img src="../../framerusercontent.com/images/hQc7ZBv90sL8zg5IkscFNQvPA4407.png" alt="Wireframes">
+            </div>
+
+            <article class="section-content reveal-el">
+                <p>Based on the interaction diagram, we translated the identified steps into low-fidelity wireframes, outlining the key screens and flows before moving into detailed design</p>
+            </article>
+
+            <div class="image-full reveal-el">
+                <img src="../../framerusercontent.com/images/B2O0RvBFafBmCwrmIZhfHXwXMbo36ae.png" alt="High Fidelity Concepts">
+            </div>
+
+            <article class="section-content reveal-el">
+                <p>We then moved into higher-fidelity concepts, experimenting with imagery, layout, and style. Early explorations included product shots, but we ultimately steered towards landscape imagery as it better aligned with Drova's brand vision, mission, and values</p>
+            </article>
+
+            <div class="image-full reveal-el">
+                <img src="../../framerusercontent.com/images/xmL308fZHfBK0xGDvyhBuQgZ5bM3660.png" alt="Streamlined Flow">
+            </div>
+
+            <article class="section-content reveal-el">
+                <p>While exploring higher-fidelity designs, we realised the flow had become overly complex! introducing too many steps before users reached the product. We then streamlined the journey by cutting unnecessary screens to keep signup fast and frictionless</p>
+            </article>
+
+            <article class="section-content reveal-el">
+                <h2>Solution</h2>
+                <p>Once the scope was clear, we focused on delivering the <strong>first version of Drova's online signup channel</strong>. The goal was to give SME leaders a faster, self-serve way into the product while still capturing the data the business needed.</p>
+                <p>Key improvements included:</p>
+                <ul>
+                    <li><strong>Streamlined flow</strong> that reduced friction and made signups faster.</li>
+                    <li><strong>Smarter data capture</strong>, collecting only the most critical details up front to decrease friction.</li>
+                    <li><strong>AI-driven profiling</strong> to personalize onboarding and optimize the experience based on user type.</li>
+                    <li><strong>Free trial access</strong>, letting customers experience product value before committing.</li>
+                </ul>
+                <p>The result was a <strong>frictionless, data-informed signup experience</strong> that balanced user needs with business goals and helped Drova take its first real step toward product-led growth.</p>
+            </article>
+
+            <div class="highlight-quote reveal-el">
+                <span class="quote-text">We reduced the signup flow to under <span class="counter-number" data-target="30">0</span> seconds, achieving our goal of a frictionless path into the product.</span>
+            </div>
+
+            <div class="image-full reveal-el">
+                <img src="../../framerusercontent.com/images/EzvV3KbJN2iGMQuZZXYx5l6JuA95b2.png" alt="Signup Flow">
+            </div>
+
+            <div class="image-full reveal-el">
+                <img src="../../framerusercontent.com/images/G5HUUzZRVO1t1irTs0ANjRBHBik1f2e.png" alt="AI Profiling">
+            </div>
+
+            <p class="section-content reveal-el" style="text-align: left; color: var(--text-muted); font-size: 14px; margin-top: var(--space-4); margin-bottom: var(--space-12);">The flow adapts based on who the customer is. Using AI profiling, we adjusted copy, prefilling as much information as possible to create a smoother, faster signup experience.</p>
+
+            <div class="image-grid">
+                <div class="image-item reveal-el">
+                    <img src="../../framerusercontent.com/images/fCvCkN8xwbWsqIQMvDeGfgFy3KQ4ea4.png" alt="Welcome Emails">
+                </div>
+                <div class="image-item reveal-el">
+                    <img src="../../framerusercontent.com/images/ObRzaFX7QuSY2MBF03QGY9rvoe126.png" alt="Team Invitations">
+                </div>
+            </div>
+
+            <p class="section-content reveal-el" style="text-align: left; color: var(--text-muted); font-size: 14px; margin-top: var(--space-4); margin-bottom: var(--space-12);">I designed not just the signup flow, but also the supporting touchpoints; From welcome emails into the product to invitations for new team members. Each interaction was crafted to reduce friction and consistently represent Drova's brand across the journey.</p>
+
+            <div class="image-full reveal-el">
+                <img src="../../framerusercontent.com/images/PqJ1vpHz8Ti7RzkDwjyV0jsa0vM2764.png" alt="Edge Cases">
+            </div>
+
+            <p class="section-content reveal-el" style="text-align: left; color: var(--text-muted); font-size: 14px; margin-top: var(--space-4); margin-bottom: var(--space-12);">I also designed edge case screens to handle unexpected scenarios, making the signup flow more resilient and reducing friction for customers.</p>
+
+            <div class="image-full reveal-el">
+                <img src="../../framerusercontent.com/images/rK5ZXhh7EpNKCGEAc4Wtw44Fc2Q5acd.png" alt="Project Scope">
+            </div>
+
+            <article class="section-content reveal-el">
+                <p>The scope of this project was wide at first, with every team wanting something different from the signup flow. By working closely with PMs and engineers, I helped shrink it down into a realistic first release. We carved out an MVP that balanced business needs with a frictionless experience for SME leaders, and delivered the first version of Drova's online signup channel.</p>
+                <p>The flow is now live, giving customers a smoother path to trial the product and supporting Drova's shift to product-led growth. If I had stayed on, my next focus would have been measuring completion rates, trial-to-paid conversions, and refining onboarding to build on the momentum of this release.</p>
+            </article>
+
+            <div class="image-full reveal-el">
+                <img src="../../framerusercontent.com/images/Prc5sqK5f2bB6lLbDVT2TopMJo6ec9.png" alt="Design System">
+            </div>
+
+            <article class="section-content reveal-el">
+                <p>Alongside the signup flow, I improved Drova's <strong>design system</strong>. The type scale was scattered and inconsistent, making it hard to use. I restructured it with clear hierarchy, size ratios, and usage guidelines; creating a system that was easier to apply and better aligned with UI principles.</p>
+                <p>I also produced <strong>product illustrations</strong> that supported user understanding and represented the brand consistently. These foundations gave the team clearer rules to design with and made the product feel more cohesive.</p>
+            </article>
+
+            <div class="project-navigation reveal-el">
+                <a href="../shareecoomy/index.html" class="project-nav-link">
+                    <svg class="project-nav-arrow" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+                    </svg>
+                    <div>
+                        <span class="project-nav-label">Previous Project</span>
+                        <span class="project-nav-title">Share Economy</span>
+                    </div>
+                </a>
+                <a href="../foragecaster/index.html" class="project-nav-link next">
+                    <div>
+                        <span class="project-nav-label">Next Project</span>
+                        <span class="project-nav-title">Foragecaster</span>
+                    </div>
+                    <svg class="project-nav-arrow" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+                    </svg>
+                </a>
+            </div>
+        </main>
+
+        <footer class="footer-bottom">
+            <div>
+                <p>© 2026 Luke Niccol</p>
+                <p>Sydney, Australia</p>
+            </div>
+            <a href="../../index.html" style="color: var(--text-secondary); text-decoration: none; font-size: 14px; font-weight: 500; transition: color 0.2s ease;">← Home</a>
+        </footer>
+    </div>
+
+    <!-- GSAP -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+    <script>
+        gsap.registerPlugin(ScrollTrigger);
+
+        function initRevealAnimations() {
+            // Set initial visibility
+            gsap.set(".reveal-el", { visibility: "visible" });
+
+            // 1. Hero Entrance
+            const heroTl = gsap.timeline({ defaults: { ease: "power3.out", duration: 1.2 } });
+            heroTl.fromTo(".hero-title", { opacity: 0, y: 40 }, { opacity: 1, y: 0, delay: 0.2 })
+                  .fromTo(".hero-subtitle", { opacity: 0, y: 20 }, { opacity: 1, y: 0 }, "-=0.9")
+                  .fromTo(".hero-meta", { opacity: 0, y: 20 }, { opacity: 1, y: 0 }, "-=0.8");
+
+            // 2. Generic Reveals
+            const reveals = document.querySelectorAll('.reveal-el:not(.hero-title):not(.hero-subtitle):not(.hero-meta)');
+            
+            // Group elements by their parent to apply stagger to grids
+            const groups = new Set();
+            reveals.forEach(el => {
+                if (el.parentElement.classList.contains('image-grid')) {
+                    groups.add(el.parentElement);
+                } else {
+                    gsap.fromTo(el, 
+                        { opacity: 0, y: 40 },
+                        { 
+                            opacity: 1, 
+                            y: 0, 
+                            duration: 1.2, 
+                            ease: "power3.out",
+                            scrollTrigger: {
+                                trigger: el,
+                                start: "top 85%",
+                                toggleActions: "play none none none"
+                            }
+                        }
+                    );
+                }
+            });
+
+            // Animate grids with stagger
+            groups.forEach(grid => {
+                const items = grid.querySelectorAll('.reveal-el');
+                gsap.fromTo(items, 
+                    { opacity: 0, y: 40 },
+                    { 
+                        opacity: 1, 
+                        y: 0, 
+                        duration: 1, 
+                        stagger: 0.15,
+                        ease: "power3.out",
+                        scrollTrigger: {
+                            trigger: grid,
+                            start: "top 85%",
+                            toggleActions: "play none none none"
+                        }
+                    }
+                );
+            });
+
+            // 3. Counter Animation for numbers
+            function animateCounter(element) {
+                const target = parseFloat(element.getAttribute('data-target'));
+                if (isNaN(target)) return;
+                
+                const obj = { val: 0 };
+                gsap.to(obj, {
+                    val: target,
+                    duration: 2,
+                    ease: "power2.out",
+                    onUpdate: () => {
+                        element.innerText = Math.floor(obj.val);
+                    }
+                });
+            }
+
+            // Animate counters when they come into view
+            document.querySelectorAll('.counter-number').forEach(counter => {
+                ScrollTrigger.create({
+                    trigger: counter,
+                    start: "top 85%",
+                    once: true,
+                    onEnter: () => animateCounter(counter)
+                });
+            });
+        }
+
+        window.addEventListener('load', () => {
+            setTimeout(initRevealAnimations, 100);
+        });
+
+        // Theme management
+        function toggleTheme() {
+            const root = document.documentElement;
+            const currentTheme = root.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            let overlay = document.querySelector('.theme-transition-overlay');
+            if (!overlay) {
+                overlay = document.createElement('div');
+                overlay.className = 'theme-transition-overlay';
+                document.body.appendChild(overlay);
+            }
+            
+            overlay.style.background = getComputedStyle(document.body).backgroundColor;
+            overlay.classList.add('active');
+            
+            setTimeout(() => {
+                root.setAttribute('data-theme', newTheme);
+                localStorage.setItem('theme', newTheme);
+                updateThemeIcon(newTheme);
+                
+                overlay.style.background = getComputedStyle(document.body).backgroundColor;
+                
+                setTimeout(() => {
+                    overlay.classList.remove('active');
+                }, 200);
+            }, 150);
+        }
+
+        function updateThemeIcon(theme) {
+            const btns = document.querySelectorAll('.theme-toggle');
+            btns.forEach(btn => {
+                btn.innerHTML = theme === 'dark' 
+                    ? '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>'
+                    : '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>';
+            });
+        }
+
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        updateThemeIcon(savedTheme);
+    </script>
+</body>
+</html>

@@ -1,0 +1,22 @@
+﻿<meta name="x-build" content="2025-09-14T11:12:43Z">
+<script>
+(() => {
+  const KEY = 'siteBuildVersion';
+  const v = document.querySelector('meta[name="x-build"]')?.content || '';
+  const cur = localStorage.getItem(KEY);
+  if (v && cur !== v) {
+    localStorage.setItem(KEY, v);
+    if (performance?.getEntriesByType('navigation')[0]?.type !== 'reload') {
+      location.reload();
+    }
+  }
+})();
+</script>
+<!doctype html><meta charset="utf-8">
+<meta http-equiv="refresh" content="0; url=/work/foragecaster/">
+<link rel="canonical" href="/work/foragecaster/">
+<title>Redirecting…</title>
+<p>If you are not redirected, <a href="/work/foragecaster/">click here</a>.</p>
+
+
+

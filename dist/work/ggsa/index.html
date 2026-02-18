@@ -1,0 +1,1224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Good to Great Schools Australia — Luke Niccol</title>
+    <meta name="description" content="Design system & platform redesign for Good to Great Schools Australia.">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="../../Logo black bg.png">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        @font-face {
+            font-family: 'Cirka';
+            src: url('../../fonts/Cirka/Cirka-Regular.woff2') format('woff2');
+            font-weight: 400;
+            font-style: normal;
+            font-display: swap;
+        }
+        @font-face {
+            font-family: 'Cirka';
+            src: url('../../fonts/Cirka/Cirka-Bold.woff2') format('woff2');
+            font-weight: 700;
+            font-style: normal;
+            font-display: swap;
+        }
+
+        :root {
+            --font-sans: 'Instrument Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            --font-serif: 'DM Serif Display', Georgia, serif;
+            --font-heading: 'Cirka', Georgia, serif;
+            
+            /* 8pt Spacing System */
+            --space-1: 8px;
+            --space-2: 16px;
+            --space-3: 24px;
+            --space-4: 32px;
+            --space-5: 40px;
+            --space-6: 48px;
+            --space-8: 64px;
+            --space-10: 80px;
+            --space-12: 96px;
+            --space-16: 128px;
+            --space-20: 160px;
+            
+            --radius-lg: 20px;
+            --radius-xl: 24px;
+            --radius-2xl: 32px;
+            --radius-full: 9999px;
+            
+            --text-primary: #111522;
+            --text-secondary: #4a5585;
+            --text-muted: #6b779c;
+            --accent: #0070cc;
+            --surface: #ffffff;
+            --surface-elevated: #f9fafc;
+            --border-subtle: rgba(0, 0, 0, 0.04);
+            --border-default: rgba(0, 0, 0, 0.08);
+            
+            --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.06);
+        }
+
+        [data-theme="dark"] {
+            --text-primary: #f8f9fc;
+            --text-secondary: #b0b9e0;
+            --text-muted: #8b99cf;
+            --accent: #4dafff;
+            --surface: #0a0a14;
+            --surface-elevated: #11111f;
+            --border-subtle: rgba(255, 255, 255, 0.03);
+            --border-default: rgba(255, 255, 255, 0.08);
+        }
+
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-sans);
+            font-size: 18px;
+            color: var(--text-primary);
+            background: var(--surface);
+            line-height: 1.7;
+            font-weight: 400;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .page-wrapper {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 var(--space-6);
+        }
+
+        /* 12-Column Grid System */
+        .grid-layout {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: var(--space-6);
+            width: 100%;
+        }
+
+        @media (max-width: 768px) {
+            .nav {
+                height: 64px;
+            }
+            .nav-inner {
+                padding: 0 var(--space-4);
+            }
+            .nav-logo {
+                font-size: 16px;
+                display: block !important;
+            }
+            .nav-right {
+                display: flex !important;
+                gap: var(--space-3);
+            }
+            .nav-back {
+                font-size: 13px;
+                display: flex !important;
+            }
+            .theme-toggle {
+                width: 36px;
+                height: 36px;
+                flex-shrink: 0;
+            }
+            .hero {
+                padding-top: var(--space-12);
+            }
+            .hero-title {
+                font-size: clamp(2.5rem, 12vw, 3.75rem);
+            }
+            .grid-layout {
+                grid-template-columns: repeat(4, 1fr);
+                gap: var(--space-4);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .page-wrapper {
+                padding: 0 var(--space-6);
+            }
+        }
+
+        /* ===== NAVIGATION ===== */
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 96px;
+            z-index: 1000;
+            background: linear-gradient(to bottom, var(--surface) 0%, rgba(255,255,255,0) 100%);
+            display: flex;
+            align-items: center;
+            pointer-events: none;
+        }
+
+        .nav-inner {
+            height: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            pointer-events: auto;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: var(--space-4);
+        }
+
+        .theme-toggle {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: var(--radius-full);
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 1px solid var(--border-default);
+            background: var(--surface);
+        }
+
+        .theme-toggle:hover {
+            color: var(--text-primary);
+            border-color: var(--accent);
+            background: var(--surface-elevated);
+        }
+
+        .theme-transition-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 9999;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .theme-transition-overlay.active {
+            opacity: 1;
+        }
+
+        .nav-logo {
+            font-family: var(--font-heading);
+            font-weight: 700;
+            font-size: 1.5rem;
+            text-decoration: none;
+            color: var(--text-primary);
+            letter-spacing: -0.02em;
+        }
+
+        .nav-back {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        .nav-back svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        .nav-back span {
+            display: none;
+        }
+
+        @media (min-width: 769px) {
+            .nav-back span {
+                display: inline;
+            }
+        }
+
+        .nav-back:hover {
+            color: var(--text-primary);
+        }
+
+        /* ===== HERO ===== */
+        .hero {
+            padding-top: var(--space-20);
+            padding-bottom: var(--space-8);
+            margin-top: var(--space-8);
+        }
+
+        .hero-tag {
+            font-size: 14px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-muted);
+            margin-bottom: var(--space-4);
+            display: block;
+        }
+
+        .hero-title {
+            font-family: var(--font-serif);
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            line-height: 1.1;
+            margin-bottom: var(--space-8);
+            max-width: 1000px;
+            font-weight: 400;
+        }
+
+        .hero-meta {
+            padding-top: var(--space-8);
+            border-top: 1px solid var(--border-default);
+        }
+
+        .meta-item {
+            grid-column: span 3;
+        }
+
+        .meta-item span:first-child {
+            display: block;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: var(--space-1);
+        }
+
+        .meta-item span:last-child {
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        @media (max-width: 768px) {
+            .meta-item {
+                grid-column: span 2;
+            }
+        }
+
+        /* ===== IMAGES ===== */
+        .image-full {
+            width: 100%;
+            margin: var(--space-8) auto;
+            border-radius: 4px;
+            overflow: hidden;
+            border: none;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .image-full img {
+            width: 100%;
+            max-width: 100%;
+            height: auto;
+            display: block;
+            object-fit: contain;
+        }
+
+        .image-large {
+            width: 100vw;
+            max-width: 2000px;
+            position: relative;
+            left: 50%;
+            transform: translateX(-50%);
+            display: block;
+        }
+
+        .image-large img {
+            width: 100%;
+            max-width: 100%;
+            display: block;
+            margin: 0 auto;
+        }
+
+        .image-7 {
+            max-width: 1200px;
+            width: 60%;
+            margin-left: auto !important;
+            margin-right: auto !important;
+            left: auto !important;
+            transform: none !important;
+        }
+
+        @media (max-width: 1200px) {
+            .image-7 {
+                width: 70%;
+                max-width: 100%;
+                margin-left: auto !important;
+                margin-right: auto !important;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .image-7 {
+                width: 80%;
+                max-width: 100%;
+                margin-left: auto !important;
+                margin-right: auto !important;
+            }
+        }
+
+        .image-8 {
+            width: 100vw;
+            max-width: 3000px;
+            margin-left: calc(50% - 50vw);
+            margin-right: calc(50% - 50vw);
+            position: relative;
+            display: block;
+        }
+
+        .image-8 img {
+            width: 100%;
+            max-width: 100%;
+            display: block;
+            margin: 0 auto;
+            transform: scale(1.95);
+            transform-origin: center;
+        }
+
+        @media (max-width: 1400px) {
+            .image-8 {
+                max-width: 2400px;
+            }
+        }
+
+        @media (max-width: 1200px) {
+            .image-8 {
+                width: 100%;
+                margin-left: 0;
+                margin-right: 0;
+                max-width: 100%;
+            }
+            .image-8 img {
+                transform: scale(1.7);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .image-8 {
+                width: 100%;
+                max-width: 100%;
+                margin-left: auto;
+                margin-right: auto;
+                position: relative;
+                overflow: visible;
+            }
+            .image-8 img {
+                width: 100%;
+                max-width: 100%;
+                height: auto;
+                transform: none;
+                object-fit: contain;
+                object-position: center;
+                display: block;
+                margin: 0 auto;
+            }
+        }
+
+        @media (max-width: 1400px) {
+            .image-large {
+                max-width: 1600px;
+            }
+        }
+
+        @media (max-width: 1200px) {
+            .image-large {
+                width: 100%;
+                left: 0;
+                transform: none;
+                max-width: 100%;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .image-large {
+                width: 100%;
+                max-width: 100%;
+                margin-left: auto;
+                margin-right: auto;
+                left: auto;
+                transform: none;
+                position: relative;
+            }
+            
+            .image-large img {
+                width: 100%;
+                max-width: 100%;
+                height: auto;
+                object-fit: contain;
+                object-position: center;
+                display: block;
+                margin: 0 auto;
+            }
+        }
+
+        .image-grid {
+            margin: var(--space-8) 0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--space-4);
+            justify-content: center;
+        }
+
+        .image-grid img {
+            grid-column: span 6;
+            width: 100%;
+            max-width: 100%;
+            border-radius: 0;
+            box-shadow: none;
+            border: none;
+            object-fit: contain;
+            object-position: center;
+        }
+
+        @media (max-width: 768px) {
+            .image-grid {
+                flex-direction: column;
+                align-items: center;
+            }
+            .image-grid img {
+                grid-column: span 4;
+                width: 100%;
+                max-width: 100%;
+                height: auto;
+            }
+        }
+
+        /* ===== CONTENT SECTIONS ===== */
+        .section-content {
+            max-width: 800px;
+            margin: 0 auto var(--space-12);
+        }
+
+        .section-content h2 {
+            font-family: var(--font-heading);
+            font-size: clamp(2rem, 4vw, 2.5rem);
+            margin-bottom: var(--space-6);
+            color: var(--text-primary);
+            letter-spacing: -0.02em;
+            font-weight: 700;
+            position: relative;
+            padding-left: var(--space-2);
+        }
+
+        .section-content h2::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: var(--accent);
+            border-radius: 2px;
+        }
+
+        .counter-number {
+            display: inline-block;
+            color: var(--accent);
+            font-weight: 700;
+        }
+
+        .section-content h3 {
+            font-family: var(--font-heading);
+            font-size: clamp(1.5rem, 3vw, 2rem);
+            margin-top: var(--space-12);
+            margin-bottom: var(--space-4);
+            color: var(--text-primary);
+            letter-spacing: -0.02em;
+            font-weight: 600;
+        }
+
+        .section-content p {
+            margin-bottom: var(--space-4);
+            color: var(--text-secondary);
+            font-weight: 400;
+        }
+
+        .section-content ul {
+            margin-bottom: var(--space-6);
+            padding-left: var(--space-6);
+            list-style: none;
+        }
+
+        .section-content li {
+            margin-bottom: var(--space-3);
+            color: var(--text-secondary);
+            position: relative;
+            padding-left: var(--space-4);
+        }
+
+        .section-content li::before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+            font-weight: 700;
+        }
+
+        .section-content strong {
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        .section-content code {
+            font-family: 'SFMono-Regular', Menlo, Consolas, 'PT Mono', 'Liberation Mono', Courier, monospace;
+            font-size: 85%;
+            background: rgba(135, 131, 120, 0.15);
+            color: var(--accent);
+            border-radius: 4px;
+            padding: 0.2em 0.4em;
+            position: relative;
+            bottom: 0.065em;
+        }
+
+        .highlight-quote {
+            background: #1a1b3a;
+            color: #ffffff;
+            padding: var(--space-12) var(--space-8);
+            border-radius: var(--radius-2xl);
+            font-size: clamp(2rem, 4vw, 3.5rem);
+            font-weight: 400;
+            font-style: normal;
+            line-height: 1.2;
+            margin: var(--space-16) auto;
+            max-width: 1000px;
+            opacity: 0;
+            transform: translateY(40px);
+        }
+
+        .highlight-quote .count-number {
+            display: inline-block;
+            color: var(--accent);
+            font-weight: 700;
+            min-width: 2ch;
+        }
+
+        /* ===== PROJECT NAVIGATION ===== */
+        .project-navigation {
+            display: flex;
+            justify-content: space-between;
+            gap: var(--space-6);
+            padding: var(--space-4) 0;
+            margin: var(--space-20) 0;
+        }
+
+        .project-nav-link {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+            padding: var(--space-4);
+            background: var(--surface-elevated);
+            border: 1px solid var(--border-default);
+            border-radius: var(--radius-xl);
+            text-decoration: none;
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+            min-width: 0;
+            overflow: hidden;
+        }
+
+        .project-nav-link:hover {
+            border-color: var(--accent);
+            transform: translateY(-2px);
+            background: var(--surface);
+        }
+
+        .project-nav-link.next {
+            flex-direction: row-reverse;
+        }
+
+        .project-nav-arrow {
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--accent);
+            flex-shrink: 0;
+        }
+
+        .project-nav-info {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            min-width: 0;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        .project-nav-label {
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            letter-spacing: 0.05em;
+            line-height: 1.2;
+            white-space: nowrap;
+        }
+
+        .project-nav-title {
+            font-family: var(--font-heading);
+            font-size: 1.1rem;
+            color: var(--text-primary);
+            line-height: 1.3;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            hyphens: auto;
+        }
+
+        @media (max-width: 768px) {
+            .project-navigation {
+                margin: var(--space-12) 0;
+                gap: var(--space-4);
+            }
+
+            .project-nav-link {
+                padding: var(--space-3);
+                gap: var(--space-2);
+                min-width: 0;
+            }
+
+            .project-nav-info {
+                min-width: 0;
+            }
+
+            .project-nav-label {
+                font-size: 9px;
+            }
+
+            .project-nav-title {
+                font-size: 0.9rem;
+                line-height: 1.2;
+            }
+        }
+
+        /* ===== FOOTER REFINEMENT ===== */
+        .footer {
+            padding: var(--space-16) 0 var(--space-8);
+            background: var(--surface);
+            border-top: 1px solid var(--border-subtle);
+        }
+
+        .next-project-container {
+            padding: var(--space-12) 0;
+            margin-bottom: var(--space-12);
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        .next-project-link {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            text-decoration: none;
+        }
+
+        .next-project-info {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-1);
+        }
+
+        .next-project-label {
+            font-size: 14px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-muted);
+        }
+
+        .next-project-title {
+            font-family: var(--font-serif);
+            font-size: clamp(2rem, 4vw, 3.5rem);
+            color: var(--text-primary);
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .next-project-arrow {
+            width: 64px;
+            height: 64px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid var(--border-default);
+            border-radius: var(--radius-full);
+            color: var(--text-primary);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .next-project-link:hover .next-project-arrow {
+            background: var(--text-primary);
+            color: var(--surface);
+            transform: translateX(12px) rotate(-45deg);
+        }
+
+        .next-project-link:hover .next-project-title {
+            transform: translateX(8px);
+        }
+
+        .footer-bottom {
+            padding-top: var(--space-8);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: var(--space-4);
+        }
+        
+        .footer-bottom a:hover {
+            color: var(--accent);
+        }
+
+        .footer-bottom p {
+            font-size: 14px;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        @media (max-width: 768px) {
+            .hero {
+                padding-top: var(--space-12);
+            }
+            .nav-logo {
+                font-size: 1.25rem;
+            }
+            
+            .hero {
+                padding-top: var(--space-16);
+                padding-bottom: var(--space-6);
+                margin-top: var(--space-6);
+            }
+            
+            .hero-title {
+                font-size: clamp(2rem, 8vw, 3rem);
+                margin-bottom: var(--space-6);
+            }
+            
+            .hero-meta {
+                grid-template-columns: repeat(2, 1fr);
+                gap: var(--space-4);
+                padding-top: var(--space-6);
+            }
+            
+            .meta-item {
+                grid-column: span 2;
+            }
+            
+            .image-grid { grid-template-columns: 1fr; }
+            .hero-title { font-size: 2.5rem; }
+            .hero-meta { grid-template-columns: 1fr 1fr; }
+            .footer-bottom { flex-direction: column; gap: var(--space-2); text-align: center; }
+            .section-content {
+                margin-bottom: var(--space-8);
+            }
+            .section-content h2 {
+                font-size: clamp(1.75rem, 6vw, 2.5rem);
+                margin-bottom: var(--space-4);
+            }
+            .section-content h3 {
+                font-size: clamp(1.25rem, 4vw, 1.75rem);
+            }
+            .section-content p {
+                margin-bottom: var(--space-4);
+                font-size: 16px;
+            }
+            .image-full {
+                width: 100%;
+                max-width: 100%;
+                margin: var(--space-6) auto;
+                padding: 0;
+                border-radius: 0;
+                border-left: none;
+                border-right: none;
+                overflow: visible;
+            }
+            .image-full img {
+                width: 100%;
+                max-width: 100%;
+                height: auto;
+                object-fit: contain;
+                object-position: center;
+                display: block;
+                margin: 0 auto;
+            }
+            .highlight-quote {
+                padding: var(--space-8) var(--space-6);
+                font-size: clamp(1.5rem, 5vw, 2.5rem);
+                margin: var(--space-8) auto;
+            }
+            .project-navigation {
+                flex-direction: column;
+                gap: var(--space-6);
+                padding: var(--space-8) 0;
+            }
+            .project-nav-link {
+                width: 100%;
+            }
+            .project-nav-link.next {
+                flex-direction: row;
+            }
+            .project-nav-arrow {
+                width: 40px;
+                height: 40px;
+            }
+            .project-nav-title {
+                font-size: clamp(1.25rem, 4vw, 2rem);
+            }
+        }
+        /* ===== REVEAL SYSTEM ===== */
+        .js-enabled .hero-title,
+        .js-enabled .hero-meta,
+        .js-enabled .image-full,
+        .js-enabled .section-content,
+        .js-enabled .project-navigation {
+            opacity: 0;
+            visibility: hidden;
+        }
+    </style>
+</head>
+<body>
+    <script>
+        document.documentElement.classList.add('js-enabled');
+        // Failsafe: if animations don't start, show content after 3s
+        setTimeout(() => {
+            if (getComputedStyle(document.querySelector('.hero-title')).visibility === 'hidden') {
+                document.documentElement.classList.remove('js-enabled');
+            }
+        }, 3000);
+    </script>
+    <nav class="nav">
+        <div class="page-wrapper" style="width: 100%; max-width: 1280px;">
+            <div class="nav-inner" style="height: 100%; display: flex; justify-content: space-between; align-items: center;">
+                <a href="../../index.html" class="nav-logo">Luke Niccol</a>
+                <div class="nav-right">
+                    <a href="../../index.html" class="nav-back">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                        <span>Home</span>
+                    </a>
+                    <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle dark mode" type="button">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="page-wrapper">
+        <div style="padding-top: var(--space-8);"></div>
+        <main>
+            <header class="hero">
+                <h1 class="hero-title">Design system & platform redesign for Good to Great Schools Australia</h1>
+                
+                <div class="hero-meta grid-layout">
+                    <div class="meta-item">
+                        <span>Company</span>
+                        <span>GGSA</span>
+                    </div>
+                    <div class="meta-item">
+                        <span>Role</span>
+                        <span>Product Designer</span>
+                    </div>
+                    <div class="meta-item">
+                        <span>Expertise</span>
+                        <span>Design System, EdTech</span>
+                    </div>
+                    <div class="meta-item">
+                        <span>Year</span>
+                        <span>2025</span>
+                    </div>
+                </div>
+            </header>
+
+            <div class="image-full image-large">
+                <img src="../../assets/ggsa photos/image 1.webp" alt="GGSA Design System">
+            </div>
+
+            <section class="section-content">
+                <h3>Design System Audit — Understanding the Problem</h3>
+                <p>When I joined GGSA, the existing design system was inconsistent and hard to scale. Components had been built at different times, by different designers, with little shared structure. Colours weren't semantic, spacing wasn't consistent, and many patterns weren't accessible or optimised for mobile and web.</p>
+                <p>Before rebuilding anything, I did a quick design system audit, grouping the old components to understand what was happening, what was breaking, and why things were diverging. It became clear the system needed a rethink:</p>
+                <ul>
+                    <li>components weren't using shared spacing or radius rules</li>
+                    <li>multiple versions of the same pattern existed</li>
+                    <li>naming wasn't predictable, which made engineering handoff difficult</li>
+                    <li>the system didn't support themeability or multi-product use</li>
+                </ul>
+                <p>This audit became the starting point for the new system.</p>
+            </section>
+
+            <div class="image-full">
+                <img src="../../assets/ggsa photos/image 2.webp" alt="Design System Audit">
+            </div>
+
+            <section class="section-content">
+                <h3>Defining a New System — Branding, Structure, and Tokens</h3>
+                <p>After the audit, I reworked the foundations of the <strong>design system</strong>, starting with <strong>colour tokens</strong>, branding, and semantic structure. I used <strong>atomic design structure</strong> to the system for maximum scalability. The goal was to build something consistent, easier to maintain, and flexible enough for the new platform.</p>
+                <p>We needed a <strong>token-based colour system</strong> that worked across different surfaces, supported accessibility, and could scale into components and flows without breaking. I built <strong>semantic tokens</strong> first (primary, surface, success, error, etc.) and then connected them to base palettes.</p>
+                <p>This gave us a more stable foundation to build on and let us create cleaner, more modern flows for the new platform.</p>
+            </section>
+
+            <div class="image-full image-large">
+                <img src="../../assets/ggsa photos/image 3.webp" alt="Color Tokens">
+            </div>
+
+            <div class="image-full">
+                <img src="../../assets/ggsa photos/IMage 4.webp" alt="Typography System">
+            </div>
+
+            <div class="image-full">
+                <img src="../../assets/ggsa photos/image 5.webp" alt="Design Tokens">
+            </div>
+
+            <section class="section-content">
+                <p>After updating the colour foundations, I reworked the <strong>typography system</strong> for both desktop and mobile. These <strong>tokens</strong> form the "atoms" of the system, which later scale into components and full templates. The previous styles had inconsistent sizes, uneven spacing, and duplicate patterns that made it hard for designers and engineers to stay aligned.</p>
+                <p><strong>Typography</strong> was also standardised using repeatable patterns from <em>Practical UI</em>, which ensured hierarchy behaves consistently across all page templates later in the process. The new <strong>type scale</strong> creates a predictable hierarchy across headings, labels, and body text. It reduces style duplication, improves readability, and gives the new platform a cleaner, more consistent feel. Having a stable type system also made component building easier, since every pattern now maps to a clear text style.</p>
+                <p>After defining colours and typography, I set up the <strong>design system</strong> inside Figma using a clean, predictable <strong>variable structure</strong>. The previous system didn't have shared spacing, radius, or colour variables, which made components hard to maintain and led to inconsistent UI.</p>
+                <p>The new <strong>variable collection</strong> uses clear naming and grouped hierarchies so the system is easy to navigate for other designers, and also works well with <strong>MCP and AI tools</strong> like Cursor and Claude Code. These tools rely on predictable naming patterns (<code>spacing/*</code>, <code>radius/*</code>, <code>color/*</code>) to automate layouts, generate components, and support future theming.</p>
+            </section>
+
+            <div class="image-full image-large">
+                <img src="../../assets/ggsa photos/image 6.webp" alt="Figma Variables">
+            </div>
+
+            <section class="section-content">
+                <p>Once the new tokens and variables were in place, I rebuilt the component library so everything aligned to the same spacing, typography, colour, and interaction rules. I used parts of Untitled UI as a baseline reference for structure and naming, then adapted and expanded it so it fit the needs of the GGSA platform. This helped speed up the early setup while still allowing the system to evolve into something custom, consistent, and easy for others to maintain.</p>
+            </section>
+
+            <div class="image-full image-7">
+                <img src="../../assets/ggsa photos/image 7.webp" alt="Component Library">
+            </div>
+
+            <section class="section-content">
+                <p>Buttons, form inputs, radio buttons, dropdowns, and cards were all redesigned to use semantic colour tokens, shared spacing, and consistent radii. Every component has clear states (hover, focus, pressed, disabled) and follows the same logic, which makes engineering handoff simpler and improves long-term scalability.</p>
+            </section>
+
+            <div class="image-full">
+                <img src="../../assets/ggsa photos/image 8.webp" alt="Page Templates">
+            </div>
+
+            <section class="section-content">
+                <p>With the foundations in place (<strong>tokens, variables, components</strong>), I moved into applying the system across full <strong>page templates</strong>. I structured the build using an <strong>atomic design approach</strong>, starting with atoms (buttons, inputs, labels), then building molecules and organisms, and finally full screen layouts.</p>
+                <p>These screens weren't designed in isolation; they're the result of a <strong>system-first workflow</strong>. Once the components were aligned, creating larger flows became much faster and far more consistent. Every template here is built directly from the shared design library, which ensures the platform scales cleanly as more pages and modules are added.</p>
+            </section>
+
+            <div class="image-full image-large">
+                <img src="../../assets/ggsa photos/image 9.webp" alt="Platform Screens">
+            </div>
+
+            <div class="image-full image-large">
+                <img src="../../assets/ggsa photos/image 10.webp" alt="Final Platform Screens">
+            </div>
+
+            <div class="image-full image-large">
+                <img src="../../assets/ggsa photos/image 11.webp" alt="Final Platform Implementation">
+            </div>
+
+            <section class="section-content">
+                <p>These final screens show how the updated design system comes together inside real product flows. Everything here is built directly from the same tokens, variables, components, and templates, the same way a scalable white label platform needs to operate. Rebuilding GGSA's system taught me how to move fast while keeping quality high: aligning UI foundations, making reusable patterns, and rolling them out across multiple parts of a product without losing consistency.</p>
+            </section>
+        </main>
+    </div>
+
+    <footer class="footer">
+        <div class="page-wrapper">
+            <!-- Project Navigation -->
+            <div class="project-navigation">
+                <a href="../foragecaster/index.html" class="project-nav-link">
+                    <div class="project-nav-arrow">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+                    </div>
+                    <div class="project-nav-info">
+                        <span class="project-nav-label">Previous Project</span>
+                        <span class="project-nav-title">Foragecaster</span>
+                    </div>
+                </a>
+                <a href="../rpp/index.html" class="project-nav-link next">
+                    <div class="project-nav-arrow">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                    </div>
+                    <div class="project-nav-info">
+                        <span class="project-nav-label">Next Project</span>
+                        <span class="project-nav-title">Rural Property Platform</span>
+                    </div>
+                </a>
+            </div>
+
+            <div class="footer-bottom">
+                <div>
+                    <p>© 2026 Luke Niccol</p>
+                    <p>Sydney, Australia</p>
+                </div>
+                <a href="../../index.html" style="color: var(--text-secondary); text-decoration: none; font-size: 14px; font-weight: 500; transition: color 0.2s ease;">← Home</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- GSAP for animations -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+    <script>
+        // Register ScrollTrigger plugin
+        gsap.registerPlugin(ScrollTrigger);
+
+        function initRevealAnimations() {
+            // Set initial visibility
+            gsap.set(".hero-title, .hero-meta, .image-full, .section-content, .project-navigation", { 
+                visibility: "visible" 
+            });
+
+            // 1. Hero Entrance
+            const heroTl = gsap.timeline({ defaults: { ease: "power3.out", duration: 1.2 } });
+            heroTl.fromTo(".hero-title", 
+                { opacity: 0, y: 40 }, 
+                { opacity: 1, y: 0, delay: 0.3 }
+            )
+            .fromTo(".hero-meta", 
+                { opacity: 0, y: 20 }, 
+                { opacity: 1, y: 0 }, 
+                "-=0.9"
+            );
+
+            // 2. Section Content & Images
+            const reveals = document.querySelectorAll('.section-content, .image-full');
+            reveals.forEach(el => {
+                gsap.fromTo(el, 
+                    { opacity: 0, y: 40 },
+                    { 
+                        opacity: 1, 
+                        y: 0, 
+                        duration: 1.2, 
+                        ease: "power3.out",
+                        scrollTrigger: {
+                            trigger: el,
+                            start: "top 85%",
+                            toggleActions: "play none none none"
+                        }
+                    }
+                );
+            });
+
+            // 3. Project Nav
+            gsap.fromTo(".project-navigation", 
+                { opacity: 0, y: 30 },
+                { 
+                    opacity: 1, 
+                    y: 0, 
+                    duration: 1, 
+                    ease: "power3.out",
+                    scrollTrigger: {
+                        trigger: ".project-navigation",
+                        start: "top 90%",
+                        toggleActions: "play none none none"
+                    }
+                }
+            );
+
+            // Special: Quote animation
+            gsap.fromTo('#quote-1', 
+                { opacity: 0, y: 40 },
+                {
+                    opacity: 1,
+                    y: 0,
+                    duration: 1.2,
+                    ease: 'power3.out',
+                    scrollTrigger: {
+                        trigger: '#quote-1',
+                        start: 'top 80%',
+                        toggleActions: 'play none none none'
+                    }
+                }
+            );
+        }
+
+        // Counter Animation for numbers
+        function animateCounter(element) {
+            const target = parseFloat(element.getAttribute('data-target'));
+            if (isNaN(target)) return;
+            
+            const obj = { val: 0 };
+            gsap.to(obj, {
+                val: target,
+                duration: 2,
+                ease: "power2.out",
+                onUpdate: () => {
+                    element.innerText = Math.floor(obj.val);
+                }
+            });
+        }
+
+        // Animate counters when they come into view
+        function initCounterAnimations() {
+            document.querySelectorAll('.counter-number').forEach(counter => {
+                ScrollTrigger.create({
+                    trigger: counter,
+                    start: "top 85%",
+                    once: true,
+                    onEnter: () => animateCounter(counter)
+                });
+            });
+        }
+
+        // Initialize on load
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                initRevealAnimations();
+                initCounterAnimations();
+            }, 100);
+        });
+
+        // Theme management
+        function toggleTheme() {
+            const root = document.documentElement;
+            const currentTheme = root.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            let overlay = document.querySelector('.theme-transition-overlay');
+            if (!overlay) {
+                overlay = document.createElement('div');
+                overlay.className = 'theme-transition-overlay';
+                document.body.appendChild(overlay);
+            }
+            
+            overlay.style.background = getComputedStyle(document.body).backgroundColor;
+            overlay.classList.add('active');
+            
+            setTimeout(() => {
+                root.setAttribute('data-theme', newTheme);
+                localStorage.setItem('theme', newTheme);
+                updateThemeIcon(newTheme);
+                
+                overlay.style.background = getComputedStyle(document.body).backgroundColor;
+                
+                setTimeout(() => {
+                    overlay.classList.remove('active');
+                }, 200);
+            }, 150);
+        }
+
+        function updateThemeIcon(theme) {
+            const btns = document.querySelectorAll('.theme-toggle');
+            btns.forEach(btn => {
+                btn.innerHTML = theme === 'dark' 
+                    ? '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>'
+                    : '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>';
+            });
+        }
+
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        updateThemeIcon(savedTheme);
+    </script>
+</body>
+</html>

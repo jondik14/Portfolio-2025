@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body { font-family: sans-serif; padding: 40px; }
+        #portraitMosaic { 
+            width: 400px; 
+            height: 300px; 
+            background: #333; 
+            position: relative;
+            cursor: pointer;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .mosaic-grid {
+            position: absolute;
+            inset: 0;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-template-rows: repeat(3, 1fr);
+            gap: 2px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s;
+        }
+        .mosaic-grid.active { opacity: 1; pointer-events: auto; }
+        .mosaic-piece { background: #666; transition: transform 0.3s; }
+        .mosaic-piece:hover { transform: scale(0.95); background: #888; }
+    </style>
+</head>
+<body>
+    <h1>Mosaic Test</h1>
+    <p>Click the box below to see mosaic effect:</p>
+    <div id="portraitMosaic">
+        <span>Click me!</span>
+        <div class="mosaic-grid" id="mosaicGrid">
+            <div class="mosaic-piece"></div>
+            <div class="mosaic-piece"></div>
+            <div class="mosaic-piece"></div>
+            <div class="mosaic-piece"></div>
+            <div class="mosaic-piece"></div>
+            <div class="mosaic-piece"></div>
+            <div class="mosaic-piece"></div>
+            <div class="mosaic-piece"></div>
+            <div class="mosaic-piece"></div>
+            <div class="mosaic-piece"></div>
+            <div class="mosaic-piece"></div>
+            <div class="mosaic-piece"></div>
+        </div>
+    </div>
+    <script>
+        document.getElementById('portraitMosaic').addEventListener('click', function() {
+            document.getElementById('mosaicGrid').classList.toggle('active');
+        });
+    </script>
+</body>
+</html>
